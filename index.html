@@ -21,18 +21,18 @@
         <main>
             <!-- Sales Rep Settings (Collapsible) -->
             <div class="card sales-rep-settings">
-                <div class="settings-header" id="toggle-settings-btn">
+                <button class="settings-header" id="toggle-settings-btn" aria-expanded="false" aria-controls="settings-content" type="button">
                     <h2>⚙️ Sales Rep Settings (Yuno Rates)</h2>
                     <span id="settings-icon">▼</span>
-                </div>
+                </button>
                 <div id="settings-content" style="display: none;">
                     <div class="input-row">
                         <div class="input-group">
-                            <label>Yuno Gas Unit Rate (c)</label>
+                            <label for="yuno-gas-rate">Yuno Gas Unit Rate (c)</label>
                             <input type="number" id="yuno-gas-rate" value="10.5" step="0.01" min="0">
                         </div>
                         <div class="input-group">
-                            <label>Yuno Gas Standing Charge (€)</label>
+                            <label for="yuno-gas-standing">Yuno Gas Standing Charge (€)</label>
                             <input type="number" id="yuno-gas-standing" value="150" step="0.01" min="0">
                         </div>
                     </div>
@@ -40,11 +40,11 @@
                     <h3>Electricity (Standard 24hr)</h3>
                     <div class="input-row">
                         <div class="input-group">
-                            <label>Yuno Unit Rate (c)</label>
+                            <label for="yuno-elec-std-rate">Yuno Unit Rate (c)</label>
                             <input type="number" id="yuno-elec-std-rate" value="28.74" step="0.01" min="0">
                         </div>
                         <div class="input-group">
-                            <label>Yuno Standing Charge (€)</label>
+                            <label for="yuno-elec-std-standing">Yuno Standing Charge (€)</label>
                             <input type="number" id="yuno-elec-std-standing" value="201.12" step="0.01" min="0">
                         </div>
                     </div>
@@ -52,15 +52,15 @@
                     <h3>Electricity (Day / Night)</h3>
                     <div class="input-row">
                         <div class="input-group">
-                            <label>Yuno Day Rate (c)</label>
+                            <label for="yuno-elec-dn-day-rate">Yuno Day Rate (c)</label>
                             <input type="number" id="yuno-elec-dn-day-rate" value="30.00" step="0.01" min="0">
                         </div>
                         <div class="input-group">
-                            <label>Yuno Night Rate (c)</label>
+                            <label for="yuno-elec-dn-night-rate">Yuno Night Rate (c)</label>
                             <input type="number" id="yuno-elec-dn-night-rate" value="15.00" step="0.01" min="0">
                         </div>
                         <div class="input-group">
-                            <label>Yuno Standing Charge (€)</label>
+                            <label for="yuno-elec-dn-standing">Yuno Standing Charge (€)</label>
                             <input type="number" id="yuno-elec-dn-standing" value="220.00" step="0.01" min="0">
                         </div>
                     </div>
@@ -68,19 +68,19 @@
                     <h3>Electricity (Smart: Day/Night/Peak)</h3>
                     <div class="input-row">
                         <div class="input-group">
-                            <label>Yuno Day Rate (c)</label>
+                            <label for="yuno-elec-smart-day-rate">Yuno Day Rate (c)</label>
                             <input type="number" id="yuno-elec-smart-day-rate" value="29.00" step="0.01" min="0">
                         </div>
                         <div class="input-group">
-                            <label>Yuno Night Rate (c)</label>
+                            <label for="yuno-elec-smart-night-rate">Yuno Night Rate (c)</label>
                             <input type="number" id="yuno-elec-smart-night-rate" value="14.00" step="0.01" min="0">
                         </div>
                         <div class="input-group">
-                            <label>Yuno Peak Rate (c)</label>
+                            <label for="yuno-elec-smart-peak-rate">Yuno Peak Rate (c)</label>
                             <input type="number" id="yuno-elec-smart-peak-rate" value="40.00" step="0.01" min="0">
                         </div>
                         <div class="input-group">
-                            <label>Yuno Standing Charge (€)</label>
+                            <label for="yuno-elec-smart-standing">Yuno Standing Charge (€)</label>
                             <input type="number" id="yuno-elec-smart-standing" value="210.00" step="0.01" min="0">
                         </div>
                     </div>
@@ -95,14 +95,14 @@
                         <div class="toggle-group">
                             <label>Fuel Type</label>
                             <div class="radio-buttons">
-                                <label class="radio-btn"><input type="radio" name="fuel-type" value="single" checked> Single (Elec)</label>
-                                <label class="radio-btn"><input type="radio" name="fuel-type" value="dual"> Dual Fuel</label>
+                                <label class="radio-btn" for="fuel-single"><input type="radio" id="fuel-single" name="fuel-type" value="single" checked> Single (Elec)</label>
+                                <label class="radio-btn" for="fuel-dual"><input type="radio" id="fuel-dual" name="fuel-type" value="dual"> Dual Fuel</label>
                             </div>
                         </div>
 
                         <div class="toggle-group">
-                            <label>Currently In Contract?</label>
-                            <label class="switch">
+                            <label for="in-contract">Currently In Contract?</label>
+                            <label class="switch" for="in-contract">
                                 <input type="checkbox" id="in-contract">
                                 <span class="slider round"></span>
                             </label>
@@ -112,9 +112,9 @@
                         <div class="toggle-group">
                             <label>Electricity Meter Type</label>
                             <div class="radio-buttons">
-                                <label class="radio-btn"><input type="radio" name="meter-type" value="standard" checked> Standard</label>
-                                <label class="radio-btn"><input type="radio" name="meter-type" value="daynight"> Day/Night</label>
-                                <label class="radio-btn"><input type="radio" name="meter-type" value="smart"> Smart</label>
+                                <label class="radio-btn" for="meter-standard"><input type="radio" id="meter-standard" name="meter-type" value="standard" checked> Standard</label>
+                                <label class="radio-btn" for="meter-daynight"><input type="radio" id="meter-daynight" name="meter-type" value="daynight"> Day/Night</label>
+                                <label class="radio-btn" for="meter-smart"><input type="radio" id="meter-smart" name="meter-type" value="smart"> Smart</label>
                             </div>
                         </div>
                     </div>
@@ -128,16 +128,16 @@
                     <div id="elec-standard-inputs" class="meter-inputs active">
                         <div class="input-row">
                             <div class="input-group">
-                                <label>Current Unit Rate (c)</label>
+                                <label for="current-elec-std-rate">Current Unit Rate (c)</label>
                                 <input type="number" id="current-elec-std-rate" step="0.01" min="0">
                             </div>
                             <div class="input-group">
-                                <label>Annual Usage (kWh)</label>
+                                <label for="elec-std-usage">Annual Usage (kWh)</label>
                                 <input type="number" id="elec-std-usage" value="4200" min="0">
                             </div>
                         </div>
                         <div class="input-group">
-                            <label>Current Annual Standing Charge (€)</label>
+                            <label for="current-elec-std-standing">Current Annual Standing Charge (€)</label>
                             <input type="number" id="current-elec-std-standing" step="0.01" min="0">
                         </div>
                     </div>
@@ -146,26 +146,26 @@
                     <div id="elec-daynight-inputs" class="meter-inputs" style="display: none;">
                         <div class="input-row">
                             <div class="input-group">
-                                <label>Current Day Rate (c)</label>
+                                <label for="current-elec-dn-day-rate">Current Day Rate (c)</label>
                                 <input type="number" id="current-elec-dn-day-rate" step="0.01" min="0">
                             </div>
                             <div class="input-group">
-                                <label>Annual Day Usage (kWh)</label>
+                                <label for="elec-dn-day-usage">Annual Day Usage (kWh)</label>
                                 <input type="number" id="elec-dn-day-usage" value="2000" min="0">
                             </div>
                         </div>
                         <div class="input-row">
                             <div class="input-group">
-                                <label>Current Night Rate (c)</label>
+                                <label for="current-elec-dn-night-rate">Current Night Rate (c)</label>
                                 <input type="number" id="current-elec-dn-night-rate" step="0.01" min="0">
                             </div>
                             <div class="input-group">
-                                <label>Annual Night Usage (kWh)</label>
+                                <label for="elec-dn-night-usage">Annual Night Usage (kWh)</label>
                                 <input type="number" id="elec-dn-night-usage" value="2200" min="0">
                             </div>
                         </div>
                         <div class="input-group">
-                            <label>Current Annual Standing Charge (€)</label>
+                            <label for="current-elec-dn-standing">Current Annual Standing Charge (€)</label>
                             <input type="number" id="current-elec-dn-standing" step="0.01" min="0">
                         </div>
                     </div>
@@ -174,36 +174,36 @@
                     <div id="elec-smart-inputs" class="meter-inputs" style="display: none;">
                         <div class="input-row">
                             <div class="input-group">
-                                <label>Current Day Rate (c)</label>
+                                <label for="current-elec-smart-day-rate">Current Day Rate (c)</label>
                                 <input type="number" id="current-elec-smart-day-rate" step="0.01" min="0">
                             </div>
                             <div class="input-group">
-                                <label>Annual Day Usage (kWh)</label>
+                                <label for="elec-smart-day-usage">Annual Day Usage (kWh)</label>
                                 <input type="number" id="elec-smart-day-usage" value="2000" min="0">
                             </div>
                         </div>
                         <div class="input-row">
                             <div class="input-group">
-                                <label>Current Night Rate (c)</label>
+                                <label for="current-elec-smart-night-rate">Current Night Rate (c)</label>
                                 <input type="number" id="current-elec-smart-night-rate" step="0.01" min="0">
                             </div>
                             <div class="input-group">
-                                <label>Annual Night Usage (kWh)</label>
+                                <label for="elec-smart-night-usage">Annual Night Usage (kWh)</label>
                                 <input type="number" id="elec-smart-night-usage" value="1500" min="0">
                             </div>
                         </div>
                         <div class="input-row">
                             <div class="input-group">
-                                <label>Current Peak Rate (c)</label>
+                                <label for="current-elec-smart-peak-rate">Current Peak Rate (c)</label>
                                 <input type="number" id="current-elec-smart-peak-rate" step="0.01" min="0">
                             </div>
                             <div class="input-group">
-                                <label>Annual Peak Usage (kWh)</label>
+                                <label for="elec-smart-peak-usage">Annual Peak Usage (kWh)</label>
                                 <input type="number" id="elec-smart-peak-usage" value="700" min="0">
                             </div>
                         </div>
                         <div class="input-group">
-                            <label>Current Annual Standing Charge (€)</label>
+                            <label for="current-elec-smart-standing">Current Annual Standing Charge (€)</label>
                             <input type="number" id="current-elec-smart-standing" step="0.01" min="0">
                         </div>
                     </div>
@@ -214,16 +214,16 @@
                         <h3 class="section-title">Gas Details</h3>
                         <div class="input-row">
                             <div class="input-group">
-                                <label>Current Gas Unit Rate (c)</label>
+                                <label for="current-gas-rate">Current Gas Unit Rate (c)</label>
                                 <input type="number" id="current-gas-rate" step="0.01" min="0">
                             </div>
                             <div class="input-group">
-                                <label>Annual Gas Usage (kWh)</label>
+                                <label for="gas-usage">Annual Gas Usage (kWh)</label>
                                 <input type="number" id="gas-usage" value="11000" min="0">
                             </div>
                         </div>
                         <div class="input-group">
-                            <label>Current Annual Standing Charge (€)</label>
+                            <label for="current-gas-standing">Current Annual Standing Charge (€)</label>
                             <input type="number" id="current-gas-standing" step="0.01" min="0">
                         </div>
                     </div>
@@ -232,14 +232,24 @@
                         Please ensure all fields are filled with positive numbers.
                     </div>
 
-                    <button type="submit" class="btn-calculate" id="calculate-btn">Calculate My Savings</button>
+                    <div class="button-group">
+                        <button type="submit" class="btn-calculate" id="calculate-btn">Calculate My Savings</button>
+                        <button type="button" class="btn-reset" id="reset-btn">Clear Form</button>
+                    </div>
                 </form>
             </div>
 
             <!-- Results Section -->
             <div class="card results-card" id="results-section" style="display: none;">
+                <div class="toggle-group view-toggle">
+                    <label class="switch" for="view-toggle">
+                        <input type="checkbox" id="view-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="toggle-label" id="view-toggle-label">Showing Annual Savings</span>
+                </div>
                 <div id="savings-content">
-                    <h2>Your Estimated Annual Savings</h2>
+                    <h2 id="savings-heading">Your Estimated Annual Savings</h2>
 
                     <div class="breakdown-box">
                         <div class="breakdown-item" id="breakdown-elec">
