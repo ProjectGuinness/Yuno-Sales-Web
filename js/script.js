@@ -88,6 +88,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const yunoElecSmartPeakRate = document.getElementById('yuno-elec-smart-peak-rate');
     const yunoElecSmartStanding = document.getElementById('yuno-elec-smart-standing');
 
+    // Persistence for Yuno Settings
+    const yunoInputs = [
+        yunoGasRate, yunoGasStanding, yunoElecStdRate, yunoElecStdStanding,
+        yunoElecDnDayRate, yunoElecDnNightRate, yunoElecDnStanding,
+        yunoElecSmartDayRate, yunoElecSmartNightRate, yunoElecSmartPeakRate, yunoElecSmartStanding
+    ];
+
+    yunoInputs.forEach(input => {
+        // Load saved value
+        const savedVal = localStorage.getItem(input.id);
+        if (savedVal !== null) {
+            input.value = savedVal;
+        }
+        // Save on input change
+        input.addEventListener('input', () => {
+            localStorage.setItem(input.id, input.value);
+        });
+    });
     let currentResults = null;
 
     // --- Calculation Logic (Separated) ---
