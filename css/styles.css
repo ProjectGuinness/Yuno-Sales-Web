@@ -73,6 +73,19 @@ header p {
 /* Form Styles */
 .input-group {
     margin-bottom: 1.5rem;
+    flex: 1;
+}
+
+.input-row {
+    display: flex;
+    gap: 1rem;
+}
+
+@media (max-width: 480px) {
+    .input-row {
+        flex-direction: column;
+        gap: 0;
+    }
 }
 
 label {
@@ -90,6 +103,157 @@ input[type="number"] {
     border-radius: 8px;
     transition: border-color 0.2s, box-shadow 0.2s;
     font-family: 'Inter', sans-serif;
+}
+
+/* Sales Rep Settings */
+.sales-rep-settings {
+    background-color: #f1f3f5;
+    border: 1px dashed #adb5bd;
+    margin-bottom: 1rem;
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.settings-header h2 {
+    font-size: 1.1rem;
+    margin: 0;
+    color: #495057;
+}
+
+#settings-content {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6;
+}
+
+#settings-content h3 {
+    font-size: 0.95rem;
+    color: #495057;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Toggles & Radio Buttons */
+.config-section {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.toggle-group {
+    margin-bottom: 1.2rem;
+}
+
+.toggle-group > label {
+    margin-bottom: 0.3rem;
+}
+
+.radio-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.radio-btn {
+    background: white;
+    border: 1px solid var(--border-color);
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.radio-btn:hover {
+    background: #f1f3f5;
+}
+
+.radio-btn input[type="radio"] {
+    accent-color: var(--primary-green);
+    transform: scale(1.2);
+}
+
+/* Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary-green);
+}
+
+input:checked + .slider:before {
+    transform: translateX(22px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.helper-text {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+}
+
+.divider {
+    border: 0;
+    height: 1px;
+    background: var(--border-color);
+    margin: 1.5rem 0;
+}
+
+.section-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: var(--primary-green);
 }
 
 input[type="number"]:focus {
@@ -164,12 +328,46 @@ button:active, .btn-cta:active {
     font-weight: 600;
 }
 
+.breakdown-box {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: left;
+}
+
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+}
+
+.breakdown-item:last-child {
+    margin-bottom: 0;
+}
+
+.breakdown-item .value {
+    font-weight: 600;
+}
+
+.breakdown-item.penalty {
+    color: var(--error-color);
+}
+
 .savings-amount {
     font-size: 3.5rem;
     font-weight: 700;
     color: var(--primary-green);
     line-height: 1.2;
-    margin: 1rem 0;
+    margin: 0.5rem 0 0 0;
+}
+
+.savings-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
 }
 
 .no-savings-msg {
