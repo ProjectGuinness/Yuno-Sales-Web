@@ -106,37 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem(input.id, input.value);
         });
     });
-    let currentResults = null;
-
-    // --- Calculation Logic (Separated) ---
-    function calculateSavings(data, rates) {
-        let currentElecCost = 0;
-        let yunoElecCost = 0;
-
-        if (data.meterType === 'standard') {
-            currentElecCost = ((data.elecStdUsage * data.cElecStdRate) / 100) + data.cElecStdStanding;
-            yunoElecCost = ((data.elecStdUsage * rates.yunoElecStdRate) / 100) + rates.yunoElecStdStanding;
-        } else if (data.meterType === 'daynight') {
-            currentElecCost = (((data.elecDnDayUsage * data.cElecDnDayRate) + (data.elecDnNightUsage * data.cElecDnNightRate)) / 100) + data.cElecDnStanding;
-            yunoElecCost = (((data.elecDnDayUsage * rates.yunoElecDnDayRate) + (data.elecDnNightUsage * rates.yunoElecDnNightRate)) / 100) + rates.yunoElecDnStanding;
-        } else if (data.meterType === 'smart') {
-            currentElecCost = (((data.elecSmartDayUsage * data.cElecSmartDayRate) + (data.elecSmartNightUsage * data.cElecSmartNightRate) + (data.elecSmartPeakUsage * data.cElecSmartPeakRate)) / 100) + data.cElecSmartStanding;
-            yunoElecCost = (((data.elecSmartDayUsage * rates.yunoElecSmartDayRate) + (data.elecSmartNightUsage * rates.yunoElecSmartNightRate) + (data.elecSmartPeakUsage * rates.yunoElecSmartPeakRate)) / 100) + rates.yunoElecSmartStanding;
-        }
-
-        const elecSavings = currentElecCost - yunoElecCost;
-
-        let gasSavings = 0;
-        if (data.fuelType === 'dual') {
-            const currentGasCost = ((data.gasUsage * data.cGasRate) / 100) + data.cGasStanding;
-            const yunoGasCost = ((data.gasUsage * rates.yunoGasRate) / 100) + rates.yunoGasStanding;
-            gasSavings = currentGasCost - yunoGasCost;
-        }
-
-        let penaltyAmount = 0;
-        if (data.inContract) {
-            penaltyAmount = (data.fuelType === 'dual') ? 100 : 50;
-        }
 
         const netSavings = (elecSavings + gasSavings) - penaltyAmount;
 
