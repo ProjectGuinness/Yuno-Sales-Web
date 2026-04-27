@@ -72,6 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const breakdownElecVal = breakdownElec.querySelector('.value');
     const breakdownGas = document.getElementById('breakdown-gas');
     const breakdownGasVal = breakdownGas.querySelector('.value');
+    const breakdownCashback = document.getElementById('breakdown-cashback');
+    const breakdownCashbackVal = breakdownCashback.querySelector('.value');
     const breakdownPenalty = document.getElementById('breakdown-penalty');
     const breakdownPenaltyVal = breakdownPenalty.querySelector('.value');
 
@@ -80,19 +82,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const yunoGasStanding = document.getElementById('yuno-gas-standing');
     const yunoElecStdRate = document.getElementById('yuno-elec-std-rate');
     const yunoElecStdStanding = document.getElementById('yuno-elec-std-standing');
+    const yunoElecStdCashback = document.getElementById('yuno-elec-std-cashback');
     const yunoElecDnDayRate = document.getElementById('yuno-elec-dn-day-rate');
     const yunoElecDnNightRate = document.getElementById('yuno-elec-dn-night-rate');
     const yunoElecDnStanding = document.getElementById('yuno-elec-dn-standing');
+    const yunoElecDnCashback = document.getElementById('yuno-elec-dn-cashback');
     const yunoElecSmartDayRate = document.getElementById('yuno-elec-smart-day-rate');
     const yunoElecSmartNightRate = document.getElementById('yuno-elec-smart-night-rate');
     const yunoElecSmartPeakRate = document.getElementById('yuno-elec-smart-peak-rate');
     const yunoElecSmartStanding = document.getElementById('yuno-elec-smart-standing');
+    const yunoElecSmartCashback = document.getElementById('yuno-elec-smart-cashback');
 
     // Persistence for Yuno Settings
     const yunoInputs = [
-        yunoGasRate, yunoGasStanding, yunoElecStdRate, yunoElecStdStanding,
-        yunoElecDnDayRate, yunoElecDnNightRate, yunoElecDnStanding,
-        yunoElecSmartDayRate, yunoElecSmartNightRate, yunoElecSmartPeakRate, yunoElecSmartStanding
+        yunoGasRate, yunoGasStanding, yunoElecStdRate, yunoElecStdStanding, yunoElecStdCashback,
+        yunoElecDnDayRate, yunoElecDnNightRate, yunoElecDnStanding, yunoElecDnCashback,
+        yunoElecSmartDayRate, yunoElecSmartNightRate, yunoElecSmartPeakRate, yunoElecSmartStanding, yunoElecSmartCashback
     ];
 
     yunoInputs.forEach(input => {
@@ -106,12 +111,48 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem(input.id, input.value);
         });
     });
+    let currentResults = null;
 
-        const netSavings = (elecSavings + gasSavings) - penaltyAmount;
+    // --- Calculation Logic (Separated) ---
+    function calculateSavings(data, rates) {
+        let currentElecCost = 0;
+        let yunoElecCost = 0;
+        let cashbackAmount = 0;
+
+        if (data.meterType === 'standard') {
+            currentElecCost = ((data.elecStdUsage * data.cElecStdRate) / 100) + data.cElecStdStanding;
+            yunoElecCost = ((data.elecStdUsage * rates.yunoElecStdRate) / 100) + rates.yunoElecStdStanding;
+            cashbackAmount = rates.yunoElecStdCashback;
+        } else if (data.meterType === 'daynight') {
+            currentElecCost = (((data.elecDnDayUsage * data.cElecDnDayRate) + (data.elecDnNightUsage * data.cElecDnNightRate)) / 100) + data.cElecDnStanding;
+            yunoElecCost = (((data.elecDnDayUsage * rates.yunoElecDnDayRate) + (data.elecDnNightUsage * rates.yunoElecDnNightRate)) / 100) + rates.yunoElecDnStanding;
+            cashbackAmount = rates.yunoElecDnCashback;
+        } else if (data.meterType === 'smart') {
+            currentElecCost = (((data.elecSmartDayUsage * data.cElecSmartDayRate) + (data.elecSmartNightUsage * data.cElecSmartNightRate) + (data.elecSmartPeakUsage * data.cElecSmartPeakRate)) / 100) + data.cElecSmartStanding;
+            yunoElecCost = (((data.elecSmartDayUsage * rates.yunoElecSmartDayRate) + (data.elecSmartNightUsage * rates.yunoElecSmartNightRate) + (data.elecSmartPeakUsage * rates.yunoElecSmartPeakRate)) / 100) + rates.yunoElecSmartStanding;
+            cashbackAmount = rates.yunoElecSmartCashback;
+        }
+
+        const elecSavings = currentElecCost - yunoElecCost;
+
+        let gasSavings = 0;
+        if (data.fuelType === 'dual') {
+            const currentGasCost = ((data.gasUsage * data.cGasRate) / 100) + data.cGasStanding;
+            const yunoGasCost = ((data.gasUsage * rates.yunoGasRate) / 100) + rates.yunoGasStanding;
+            gasSavings = currentGasCost - yunoGasCost;
+        }
+
+        let penaltyAmount = 0;
+        if (data.inContract) {
+            penaltyAmount = (data.fuelType === 'dual') ? 100 : 50;
+        }
+
+        const netSavings = (elecSavings + gasSavings + cashbackAmount) - penaltyAmount;
 
         return {
             elecSavings,
             gasSavings,
+            cashbackAmount,
             penaltyAmount,
             netSavings
         };
@@ -190,13 +231,16 @@ document.addEventListener('DOMContentLoaded', () => {
             yunoGasStanding: parseFloat(yunoGasStanding.value),
             yunoElecStdRate: parseFloat(yunoElecStdRate.value),
             yunoElecStdStanding: parseFloat(yunoElecStdStanding.value),
+            yunoElecStdCashback: parseFloat(yunoElecStdCashback.value),
             yunoElecDnDayRate: parseFloat(yunoElecDnDayRate.value),
             yunoElecDnNightRate: parseFloat(yunoElecDnNightRate.value),
             yunoElecDnStanding: parseFloat(yunoElecDnStanding.value),
+            yunoElecDnCashback: parseFloat(yunoElecDnCashback.value),
             yunoElecSmartDayRate: parseFloat(yunoElecSmartDayRate.value),
             yunoElecSmartNightRate: parseFloat(yunoElecSmartNightRate.value),
             yunoElecSmartPeakRate: parseFloat(yunoElecSmartPeakRate.value),
             yunoElecSmartStanding: parseFloat(yunoElecSmartStanding.value),
+            yunoElecSmartCashback: parseFloat(yunoElecSmartCashback.value),
         };
 
         // Perform Calculation
@@ -223,6 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const elec = currentResults.elecSavings / divider;
         const gas = currentResults.gasSavings / divider;
+        const cashback = currentResults.cashbackAmount / divider;
         const pen = currentResults.penaltyAmount / divider;
         const net = currentResults.netSavings / divider;
 
@@ -234,6 +279,13 @@ document.addEventListener('DOMContentLoaded', () => {
             breakdownGasVal.textContent = `€${gas.toFixed(2)}`;
         } else {
             breakdownGas.style.display = 'none';
+        }
+
+        if (cashback > 0) {
+            breakdownCashback.style.display = 'flex';
+            breakdownCashbackVal.textContent = `€${cashback.toFixed(2)}`;
+        } else {
+            breakdownCashback.style.display = 'none';
         }
 
         if (pen > 0) {
