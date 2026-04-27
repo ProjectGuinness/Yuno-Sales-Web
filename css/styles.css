@@ -1,0 +1,207 @@
+/* Base Variables */
+:root {
+    --bg-color: #f7f9fc;
+    --text-color: #333333;
+    --text-muted: #666666;
+    --primary-green: #00b347; /* Vibrant green */
+    --primary-green-hover: #00993d;
+    --card-bg: #ffffff;
+    --border-color: #e1e4e8;
+    --focus-ring: rgba(0, 179, 71, 0.3);
+    --error-color: #d32f2f;
+}
+
+/* Reset and Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding: 1rem;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Typography */
+h1, h2, h3 {
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-weight: 700;
+}
+
+h1 {
+    font-size: 1.75rem;
+    text-align: center;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+/* Layout */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem 0;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+header p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* Cards */
+.card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+}
+
+/* Form Styles */
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    font-size: 1.1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: 'Inter', sans-serif;
+}
+
+input[type="number"]:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+input[type="number"]::placeholder {
+    color: #999;
+}
+
+.error-message {
+    color: var(--error-color);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: rgba(211, 47, 47, 0.1);
+    border-radius: 6px;
+}
+
+/* Buttons */
+button, .btn-cta {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    font-family: 'Inter', sans-serif;
+}
+
+button:active, .btn-cta:active {
+    transform: translateY(2px);
+}
+
+.btn-calculate {
+    background-color: var(--text-color);
+    color: white;
+    margin-top: 1rem;
+}
+
+.btn-calculate:hover {
+    background-color: #1a1a1a;
+}
+
+.btn-cta {
+    background-color: var(--primary-green);
+    color: white;
+    margin-top: 1.5rem;
+}
+
+.btn-cta:hover {
+    background-color: var(--primary-green-hover);
+}
+
+/* Results Section */
+.results-card {
+    text-align: center;
+    border: 2px solid var(--primary-green);
+    background-color: #f0fbf4; /* Very light green tint */
+}
+
+.results-card h2 {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.savings-amount {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--primary-green);
+    line-height: 1.2;
+    margin: 1rem 0;
+}
+
+.no-savings-msg {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    font-weight: 600;
+    margin: 1rem 0;
+}
+
+/* Footer / Disclaimer */
+footer {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.disclaimer {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* Responsive adjustments for slightly larger screens */
+@media (min-width: 480px) {
+    body {
+        padding: 2rem;
+    }
+
+    .card {
+        padding: 2rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+}
