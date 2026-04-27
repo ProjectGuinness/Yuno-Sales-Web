@@ -8,12 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const settingsIcon = document.getElementById('settings-icon');
 
     toggleSettingsBtn.addEventListener('click', () => {
-        if (settingsContent.style.display === 'none') {
+        const isExpanded = toggleSettingsBtn.getAttribute('aria-expanded') === 'true';
+        if (!isExpanded) {
             settingsContent.style.display = 'block';
             settingsIcon.textContent = '▲';
+            toggleSettingsBtn.setAttribute('aria-expanded', 'true');
         } else {
             settingsContent.style.display = 'none';
             settingsIcon.textContent = '▼';
+            toggleSettingsBtn.setAttribute('aria-expanded', 'false');
         }
     });
 
@@ -59,6 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const savingsContent = document.getElementById('savings-content');
     const noSavingsContent = document.getElementById('no-savings-content');
     const savingsAmountDisplay = document.getElementById('savings-amount');
+    const savingsHeading = document.getElementById('savings-heading');
+    const viewToggle = document.getElementById('view-toggle');
+    const viewToggleLabel = document.getElementById('view-toggle-label');
+    const resetBtn = document.getElementById('reset-btn');
 
     // Breakdown elements
     const breakdownElec = document.getElementById('breakdown-elec');
@@ -100,11 +107,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+        const netSavings = (elecSavings + gasSavings) - penaltyAmount;
+
+        return {
+            elecSavings,
+            gasSavings,
+            penaltyAmount,
+            netSavings
+        };
+    }
+
+    function clearValidationErrors() {
+        document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+    }
+
+    // --- Event Listeners ---
     form.addEventListener('submit', function(event) {
         event.preventDefault();
 
         errorMessage.style.display = 'none';
+        clearValidationErrors();
+
         resultsSection.style.display = 'none';
+        resultsSection.classList.remove('fade-in');
+
         savingsContent.style.display = 'none';
         noSavingsContent.style.display = 'none';
 
@@ -112,64 +138,45 @@ document.addEventListener('DOMContentLoaded', () => {
         const meterType = document.querySelector('input[name="meter-type"]:checked').value;
         const inContract = document.getElementById('in-contract').checked;
 
-        let currentElecCost = 0;
-        let yunoElecCost = 0;
         let isValid = true;
+        const data = { fuelType, meterType, inContract };
 
-        // Helper to parse and validate
+        // Helper to parse and validate, highlighting errors
         const getVal = (id) => {
-            const val = parseFloat(document.getElementById(id).value);
-            if (isNaN(val) || val < 0) isValid = false;
+            const el = document.getElementById(id);
+            const val = parseFloat(el.value);
+            if (isNaN(val) || val < 0) {
+                isValid = false;
+                el.classList.add('input-error');
+            }
             return val;
         };
 
-        // --- Calculate Electricity ---
+        // Extract input values
         if (meterType === 'standard') {
-            const cRate = getVal('current-elec-std-rate');
-            const usage = getVal('elec-std-usage');
-            const cStanding = getVal('current-elec-std-standing');
-            if (isValid) {
-                currentElecCost = ((usage * cRate) / 100) + cStanding;
-                yunoElecCost = ((usage * parseFloat(yunoElecStdRate.value)) / 100) + parseFloat(yunoElecStdStanding.value);
-            }
+            data.cElecStdRate = getVal('current-elec-std-rate');
+            data.elecStdUsage = getVal('elec-std-usage');
+            data.cElecStdStanding = getVal('current-elec-std-standing');
         } else if (meterType === 'daynight') {
-            const cDayRate = getVal('current-elec-dn-day-rate');
-            const dayUsage = getVal('elec-dn-day-usage');
-            const cNightRate = getVal('current-elec-dn-night-rate');
-            const nightUsage = getVal('elec-dn-night-usage');
-            const cStanding = getVal('current-elec-dn-standing');
-            if (isValid) {
-                currentElecCost = (((dayUsage * cDayRate) + (nightUsage * cNightRate)) / 100) + cStanding;
-                yunoElecCost = (((dayUsage * parseFloat(yunoElecDnDayRate.value)) + (nightUsage * parseFloat(yunoElecDnNightRate.value))) / 100) + parseFloat(yunoElecDnStanding.value);
-            }
+            data.cElecDnDayRate = getVal('current-elec-dn-day-rate');
+            data.elecDnDayUsage = getVal('elec-dn-day-usage');
+            data.cElecDnNightRate = getVal('current-elec-dn-night-rate');
+            data.elecDnNightUsage = getVal('elec-dn-night-usage');
+            data.cElecDnStanding = getVal('current-elec-dn-standing');
         } else if (meterType === 'smart') {
-            const cDayRate = getVal('current-elec-smart-day-rate');
-            const dayUsage = getVal('elec-smart-day-usage');
-            const cNightRate = getVal('current-elec-smart-night-rate');
-            const nightUsage = getVal('elec-smart-night-usage');
-            const cPeakRate = getVal('current-elec-smart-peak-rate');
-            const peakUsage = getVal('elec-smart-peak-usage');
-            const cStanding = getVal('current-elec-smart-standing');
-            if (isValid) {
-                currentElecCost = (((dayUsage * cDayRate) + (nightUsage * cNightRate) + (peakUsage * cPeakRate)) / 100) + cStanding;
-                yunoElecCost = (((dayUsage * parseFloat(yunoElecSmartDayRate.value)) + (nightUsage * parseFloat(yunoElecSmartNightRate.value)) + (peakUsage * parseFloat(yunoElecSmartPeakRate.value))) / 100) + parseFloat(yunoElecSmartStanding.value);
-            }
+            data.cElecSmartDayRate = getVal('current-elec-smart-day-rate');
+            data.elecSmartDayUsage = getVal('elec-smart-day-usage');
+            data.cElecSmartNightRate = getVal('current-elec-smart-night-rate');
+            data.elecSmartNightUsage = getVal('elec-smart-night-usage');
+            data.cElecSmartPeakRate = getVal('current-elec-smart-peak-rate');
+            data.elecSmartPeakUsage = getVal('elec-smart-peak-usage');
+            data.cElecSmartStanding = getVal('current-elec-smart-standing');
         }
 
-        const elecSavings = currentElecCost - yunoElecCost;
-
-        // --- Calculate Gas ---
-        let gasSavings = 0;
         if (fuelType === 'dual') {
-            const cGasRate = getVal('current-gas-rate');
-            const gasUsage = getVal('gas-usage');
-            const cGasStanding = getVal('current-gas-standing');
-
-            if (isValid) {
-                const currentGasCost = ((gasUsage * cGasRate) / 100) + cGasStanding;
-                const yunoGasCost = ((gasUsage * parseFloat(yunoGasRate.value)) / 100) + parseFloat(yunoGasStanding.value);
-                gasSavings = currentGasCost - yunoGasCost;
-            }
+            data.cGasRate = getVal('current-gas-rate');
+            data.gasUsage = getVal('gas-usage');
+            data.cGasStanding = getVal('current-gas-standing');
         }
 
         if (!isValid) {
@@ -177,53 +184,100 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // --- Calculate Penalty ---
-        let penaltyAmount = 0;
-        if (inContract) {
-            penaltyAmount = (fuelType === 'dual') ? 100 : 50;
-        }
+        // Extract rates
+        const rates = {
+            yunoGasRate: parseFloat(yunoGasRate.value),
+            yunoGasStanding: parseFloat(yunoGasStanding.value),
+            yunoElecStdRate: parseFloat(yunoElecStdRate.value),
+            yunoElecStdStanding: parseFloat(yunoElecStdStanding.value),
+            yunoElecDnDayRate: parseFloat(yunoElecDnDayRate.value),
+            yunoElecDnNightRate: parseFloat(yunoElecDnNightRate.value),
+            yunoElecDnStanding: parseFloat(yunoElecDnStanding.value),
+            yunoElecSmartDayRate: parseFloat(yunoElecSmartDayRate.value),
+            yunoElecSmartNightRate: parseFloat(yunoElecSmartNightRate.value),
+            yunoElecSmartPeakRate: parseFloat(yunoElecSmartPeakRate.value),
+            yunoElecSmartStanding: parseFloat(yunoElecSmartStanding.value),
+        };
 
-        // --- Final Totals ---
-        const totalGrossSavings = elecSavings + gasSavings;
-        const netSavings = totalGrossSavings - penaltyAmount;
+        // Perform Calculation
+        currentResults = calculateSavings(data, rates);
+        currentResults.fuelType = fuelType;
 
-        // --- Display Results ---
-        resultsSection.style.display = 'block';
+        // Reset toggle to annual view on new calculation
+        viewToggle.checked = false;
+
+        // Display Results
+        displayResults();
+    });
+
+    function displayResults() {
+        if (!currentResults) return;
+
+        const isMonthly = viewToggle.checked;
+        const divider = isMonthly ? 12 : 1;
+        const viewText = isMonthly ? 'Monthly' : 'Annual';
+
+        viewToggleLabel.textContent = `Showing ${viewText} Savings`;
+        savingsHeading.textContent = `Your Estimated ${viewText} Savings`;
+        document.getElementById('savings-subtitle').textContent = `Net savings in Year 1 (${viewText.toLowerCase()})`;
+
+        const elec = currentResults.elecSavings / divider;
+        const gas = currentResults.gasSavings / divider;
+        const pen = currentResults.penaltyAmount / divider;
+        const net = currentResults.netSavings / divider;
 
         // Update Breakdown
-        breakdownElecVal.textContent = `€${elecSavings.toFixed(2)}`;
+        breakdownElecVal.textContent = `€${elec.toFixed(2)}`;
 
-        if (fuelType === 'dual') {
+        if (currentResults.fuelType === 'dual') {
             breakdownGas.style.display = 'flex';
-            breakdownGasVal.textContent = `€${gasSavings.toFixed(2)}`;
+            breakdownGasVal.textContent = `€${gas.toFixed(2)}`;
         } else {
             breakdownGas.style.display = 'none';
         }
 
-        if (penaltyAmount > 0) {
+        if (pen > 0) {
             breakdownPenalty.style.display = 'flex';
-            breakdownPenaltyVal.textContent = `-€${penaltyAmount.toFixed(2)}`;
+            breakdownPenaltyVal.textContent = `-€${pen.toFixed(2)}`;
         } else {
             breakdownPenalty.style.display = 'none';
         }
 
-        // Determine if they save money
-        if (netSavings > 0) {
-            savingsAmountDisplay.textContent = `€${netSavings.toFixed(2)}`;
-            savingsContent.style.display = 'block';
+        resultsSection.style.display = 'block';
 
-            // Move breakdown to savings section if it's not already there
-            // Select the *actual* breakdown box by parent container, not the empty placeholder
+        // Trigger reflow to restart animation
+        void resultsSection.offsetWidth;
+        resultsSection.classList.add('fade-in');
+
+        // Determine if they save money
+        if (currentResults.netSavings > 0) {
+            savingsAmountDisplay.textContent = `€${net.toFixed(2)}`;
+            savingsContent.style.display = 'block';
+            noSavingsContent.style.display = 'none';
+
             const actualBreakdownBox = document.getElementById('breakdown-elec').closest('.breakdown-box');
             savingsContent.insertBefore(actualBreakdownBox, savingsAmountDisplay);
         } else {
             noSavingsContent.style.display = 'block';
+            savingsContent.style.display = 'none';
 
-            // Move breakdown to no-savings section so they can see why
             const actualBreakdownBox = document.getElementById('breakdown-elec').closest('.breakdown-box');
             noSavingsContent.appendChild(actualBreakdownBox);
         }
 
         resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    viewToggle.addEventListener('change', displayResults);
+
+    resetBtn.addEventListener('click', () => {
+        form.reset();
+        clearValidationErrors();
+        errorMessage.style.display = 'none';
+        resultsSection.style.display = 'none';
+        resultsSection.classList.remove('fade-in');
+        currentResults = null;
+        updateFormVisibility(); // Reset to initial visibility state
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 });
