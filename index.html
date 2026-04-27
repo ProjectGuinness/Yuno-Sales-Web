@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Bill Savings Calculator</title>
+    <!-- Use Google Fonts (Inter) for a clean, professional look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Relative paths for GitHub Pages -->
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Savings Calculator</h1>
+            <p>Compare your current energy rates to Yuno Energy and see your savings.</p>
+        </header>
+
+        <main>
+            <div class="card">
+                <form id="calculator-form">
+                    <div class="input-group">
+                        <label for="current-unit-rate">Your Current Unit Rate (cents)</label>
+                        <input type="number" id="current-unit-rate" placeholder="e.g., 35.5" step="0.01" min="0" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="current-standing-charge">Your Annual Standing Charge (€)</label>
+                        <input type="number" id="current-standing-charge" placeholder="e.g., 280" step="0.01" min="0" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="annual-usage">Estimated Annual Usage (kWh)</label>
+                        <input type="number" id="annual-usage" value="4200" min="0" required>
+                    </div>
+
+                    <div class="error-message" id="error-message" style="display: none;">
+                        Please ensure all fields are filled with positive numbers.
+                    </div>
+
+                    <button type="submit" class="btn-calculate" id="calculate-btn">Calculate My Savings</button>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div class="card results-card" id="results-section" style="display: none;">
+                <div id="savings-content">
+                    <h2>Your Estimated Annual Savings</h2>
+                    <div class="savings-amount" id="savings-amount">€0.00</div>
+                    <a href="#" class="btn-cta" id="cta-btn">Switch to Yuno Now</a>
+                </div>
+                <div id="no-savings-content" style="display: none;">
+                    <p class="no-savings-msg">Yuno are not currently more competitive than your current plan.</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p class="disclaimer">
+                Please note: These calculations are estimates based on the figures provided. Actual savings may vary depending on your exact usage and the inclusion of taxes, VAT, and PSO levies.
+            </p>
+        </footer>
+    </div>
+
+    <!-- Relative paths for GitHub Pages -->
+    <script src="./js/script.js"></script>
+</body>
+</html>
