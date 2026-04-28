@@ -100,16 +100,26 @@ document.addEventListener('DOMContentLoaded', () => {
         yunoElecSmartDayRate, yunoElecSmartNightRate, yunoElecSmartPeakRate, yunoElecSmartStanding, yunoElecSmartCashback
     ];
 
+    // Debounce function to limit rapid I/O
+    function debounce(func, wait) {
+        let timeout;
+        return function() {
+            const context = this, args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+    }
+
     yunoInputs.forEach(input => {
         // Load saved value
         const savedVal = localStorage.getItem(input.id);
         if (savedVal !== null) {
             input.value = savedVal;
         }
-        // Save on input change
-        input.addEventListener('input', () => {
+        // Save on input change (debounced)
+        input.addEventListener('input', debounce(() => {
             localStorage.setItem(input.id, input.value);
-        });
+        }, 500));
     });
     let currentResults = null;
 
