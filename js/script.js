@@ -237,7 +237,7 @@ function init() {
         }
 
         // Perform Calculation
-        currentResults = calculateSavings(data, rates);
+        currentResults = calculateSavings(data, DEFAULT_YUNO_SETTINGS);
         currentResults.fuelType = fuelType;
 
         // Reset toggle to annual view on new calculation
