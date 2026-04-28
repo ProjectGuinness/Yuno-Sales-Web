@@ -16,76 +16,12 @@ const DEFAULT_YUNO_SETTINGS = Object.freeze({
     yunoElecSmartNightRate: 18.91,
     yunoElecSmartPeakRate: 33.54,
     yunoElecSmartStanding: 216.30,
-    yunoElecSmartCashback: 75.00,
-    yunoRateEffectiveDate: '2026-04-01'
+    yunoElecSmartCashback: 75.00
 });
-
-const YUNO_RATE_PRESETS = Object.freeze({
-    'apr-2026': { ...DEFAULT_YUNO_SETTINGS, yunoRateEffectiveDate: '2026-04-01' },
-    'jan-2026': {
-        yunoGasRate: 8.95,
-        yunoGasStanding: 141.20,
-        yunoElecStdRate: 29.15,
-        yunoElecStdStanding: 208.90,
-        yunoElecStdCashback: 50.00,
-        yunoElecDnDayRate: 31.90,
-        yunoElecDnNightRate: 19.20,
-        yunoElecDnStanding: 232.50,
-        yunoElecDnCashback: 50.00,
-        yunoElecSmartDayRate: 31.60,
-        yunoElecSmartNightRate: 19.30,
-        yunoElecSmartPeakRate: 34.25,
-        yunoElecSmartStanding: 221.80,
-        yunoElecSmartCashback: 65.00,
-        yunoRateEffectiveDate: '2026-01-01'
-    }
-});
-
-function validateYunoValue(value, kind) {
-    if (!Number.isFinite(value) || value < 0) {
-        return { isWarning: true, message: 'Please keep Yuno settings at zero or above.' };
-    }
-    if (kind === 'rate' && value > 100) {
-        return { isWarning: true, message: 'One or more unit rates look unusually high (>100c).' };
-    }
-    if (kind === 'standing' && value > 500) {
-        return { isWarning: true, message: 'One or more standing charges look unusually high (>€500).' };
-    }
-    if (kind === 'cashback' && value > 250) {
-        return { isWarning: true, message: 'One or more cashback values look unusually high (>€250).' };
-    }
-    return { isWarning: false, message: '' };
-}
-
-function buildSettingsSummary(rates, effectiveDate) {
-    const formattedDate = effectiveDate || 'Not set';
-    return `Std ${rates.yunoElecStdRate.toFixed(2)}c + €${rates.yunoElecStdStanding.toFixed(2)} | D/N ${rates.yunoElecDnDayRate.toFixed(2)}c/${rates.yunoElecDnNightRate.toFixed(2)}c | Smart ${rates.yunoElecSmartDayRate.toFixed(2)}c/${rates.yunoElecSmartNightRate.toFixed(2)}c/${rates.yunoElecSmartPeakRate.toFixed(2)}c | Gas ${rates.yunoGasRate.toFixed(2)}c + €${rates.yunoGasStanding.toFixed(2)} | Effective ${formattedDate}`;
-}
 
 function init() {
     const form = document.getElementById('calculator-form');
     if (!form) return;
-
-    // --- UI Toggles ---
-    // Sales Rep Settings Toggle
-    const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
-    const settingsContent = document.getElementById('settings-content');
-    const settingsIcon = document.getElementById('settings-icon');
-
-    if (toggleSettingsBtn && settingsContent && settingsIcon) {
-        toggleSettingsBtn.addEventListener('click', () => {
-            const isExpanded = toggleSettingsBtn.getAttribute('aria-expanded') === 'true';
-            if (!isExpanded) {
-                settingsContent.style.display = 'block';
-                settingsIcon.textContent = '▲';
-                toggleSettingsBtn.setAttribute('aria-expanded', 'true');
-            } else {
-                settingsContent.style.display = 'none';
-                settingsIcon.textContent = '▼';
-                toggleSettingsBtn.setAttribute('aria-expanded', 'false');
-            }
-        });
-    }
 
     // Configuration Listeners
     const fuelTypeRadios = document.querySelectorAll('input[name="fuel-type"]');
@@ -155,231 +91,6 @@ function init() {
     const breakdownPenalty = document.getElementById('breakdown-penalty');
     const breakdownPenaltyVal = breakdownPenalty.querySelector('.value');
 
-    // Yuno Settings Inputs
-    const yunoGasRate = document.getElementById('yuno-gas-rate');
-    const yunoGasStanding = document.getElementById('yuno-gas-standing');
-    const yunoElecStdRate = document.getElementById('yuno-elec-std-rate');
-    const yunoElecStdStanding = document.getElementById('yuno-elec-std-standing');
-    const yunoElecStdCashback = document.getElementById('yuno-elec-std-cashback');
-    const yunoElecDnDayRate = document.getElementById('yuno-elec-dn-day-rate');
-    const yunoElecDnNightRate = document.getElementById('yuno-elec-dn-night-rate');
-    const yunoElecDnStanding = document.getElementById('yuno-elec-dn-standing');
-    const yunoElecDnCashback = document.getElementById('yuno-elec-dn-cashback');
-    const yunoElecSmartDayRate = document.getElementById('yuno-elec-smart-day-rate');
-    const yunoElecSmartNightRate = document.getElementById('yuno-elec-smart-night-rate');
-    const yunoElecSmartPeakRate = document.getElementById('yuno-elec-smart-peak-rate');
-    const yunoElecSmartStanding = document.getElementById('yuno-elec-smart-standing');
-    const yunoElecSmartCashback = document.getElementById('yuno-elec-smart-cashback');
-    const yunoRatePreset = document.getElementById('yuno-rate-preset');
-    const yunoRateEffectiveDate = document.getElementById('yuno-rate-effective-date');
-    const settingsSummary = document.getElementById('settings-summary');
-    const settingsWarning = document.getElementById('settings-warning');
-    const resetYunoSettingsBtn = document.getElementById('reset-yuno-settings-btn');
-    const exportYunoSettingsBtn = document.getElementById('export-yuno-settings-btn');
-    const importYunoSettingsBtn = document.getElementById('import-yuno-settings-btn');
-    const importYunoSettingsFile = document.getElementById('import-yuno-settings-file');
-    const YUNO_STORAGE_PREFIX = 'yuno-setting:';
-
-    // Persistence for Yuno Settings
-    const yunoInputs = [
-        yunoGasRate, yunoGasStanding, yunoElecStdRate, yunoElecStdStanding, yunoElecStdCashback,
-        yunoElecDnDayRate, yunoElecDnNightRate, yunoElecDnStanding, yunoElecDnCashback,
-        yunoElecSmartDayRate, yunoElecSmartNightRate, yunoElecSmartPeakRate, yunoElecSmartStanding, yunoElecSmartCashback
-    ];
-
-    const yunoInputKeys = {
-        yunoGasRate,
-        yunoGasStanding,
-        yunoElecStdRate,
-        yunoElecStdStanding,
-        yunoElecStdCashback,
-        yunoElecDnDayRate,
-        yunoElecDnNightRate,
-        yunoElecDnStanding,
-        yunoElecDnCashback,
-        yunoElecSmartDayRate,
-        yunoElecSmartNightRate,
-        yunoElecSmartPeakRate,
-        yunoElecSmartStanding,
-        yunoElecSmartCashback,
-    };
-
-    // Debounce function to limit rapid I/O
-    function debounce(func, wait) {
-        let timeout;
-        return function() {
-            const context = this, args = arguments;
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(context, args), wait);
-        };
-    }
-
-    function persistSetting(key, value) {
-        localStorage.setItem(`${YUNO_STORAGE_PREFIX}${key}`, value);
-    }
-
-    function readPersistedSetting(key) {
-        return localStorage.getItem(`${YUNO_STORAGE_PREFIX}${key}`);
-    }
-
-    function getCurrentYunoRates() {
-        return Object.keys(yunoInputKeys).reduce((acc, key) => {
-            const input = yunoInputKeys[key];
-            const value = parseFloat(input?.value ?? '');
-            acc[key] = Number.isFinite(value) && value >= 0 ? value : 0;
-            return acc;
-        }, {});
-    }
-
-    function applyYunoSettings(settings, persist = true) {
-        Object.entries(yunoInputKeys).forEach(([key, input]) => {
-            if (!input) return;
-            const value = settings[key];
-            if (typeof value === 'number' && Number.isFinite(value) && value >= 0) {
-                input.value = value.toFixed(2);
-            }
-            if (persist) {
-                persistSetting(input.id, input.value);
-            }
-        });
-        if (yunoRateEffectiveDate && settings.yunoRateEffectiveDate) {
-            yunoRateEffectiveDate.value = settings.yunoRateEffectiveDate;
-            if (persist) persistSetting(yunoRateEffectiveDate.id, yunoRateEffectiveDate.value);
-        }
-    }
-
-    function updateSettingsSummaryText() {
-        if (!settingsSummary) return;
-        settingsSummary.textContent = buildSettingsSummary(getCurrentYunoRates(), yunoRateEffectiveDate?.value);
-    }
-
-    function updateSettingsWarnings() {
-        if (!settingsWarning) return;
-        const warnings = [];
-        yunoInputs.forEach((input) => {
-            if (!input) return;
-            const value = parseFloat(input.value);
-            const kind = input.dataset.kind || '';
-            const warning = validateYunoValue(value, kind);
-            input.classList.toggle('input-warning', warning.isWarning);
-            if (warning.isWarning) warnings.push(warning.message);
-        });
-        if (warnings.length > 0) {
-            settingsWarning.style.display = 'block';
-            settingsWarning.textContent = [...new Set(warnings)][0];
-        } else {
-            settingsWarning.style.display = 'none';
-            settingsWarning.textContent = '';
-        }
-    }
-
-    yunoInputs.forEach(input => {
-        if (!input) return;
-        // Load saved value
-        const savedVal = readPersistedSetting(input.id);
-        if (savedVal !== null) {
-            input.value = savedVal;
-        }
-        // Save on input change (debounced)
-        input.addEventListener('input', debounce(() => {
-            persistSetting(input.id, input.value);
-        }, 500));
-        input.addEventListener('input', () => {
-            if (yunoRatePreset) yunoRatePreset.value = 'custom';
-            if (yunoRatePreset) persistSetting(yunoRatePreset.id, yunoRatePreset.value);
-            updateSettingsWarnings();
-            updateSettingsSummaryText();
-        });
-    });
-
-    if (yunoRateEffectiveDate) {
-        const savedDate = readPersistedSetting(yunoRateEffectiveDate.id);
-        if (savedDate) yunoRateEffectiveDate.value = savedDate;
-        yunoRateEffectiveDate.addEventListener('change', () => {
-            persistSetting(yunoRateEffectiveDate.id, yunoRateEffectiveDate.value);
-            if (yunoRatePreset) {
-                yunoRatePreset.value = 'custom';
-                persistSetting(yunoRatePreset.id, yunoRatePreset.value);
-            }
-            updateSettingsSummaryText();
-        });
-    }
-
-    if (yunoRatePreset) {
-        const savedPreset = readPersistedSetting(yunoRatePreset.id);
-        if (savedPreset && (savedPreset === 'custom' || YUNO_RATE_PRESETS[savedPreset])) {
-            yunoRatePreset.value = savedPreset;
-            if (savedPreset !== 'custom') applyYunoSettings(YUNO_RATE_PRESETS[savedPreset], false);
-        }
-        yunoRatePreset.addEventListener('change', () => {
-            const selectedPreset = yunoRatePreset.value;
-            persistSetting(yunoRatePreset.id, selectedPreset);
-            if (selectedPreset !== 'custom' && YUNO_RATE_PRESETS[selectedPreset]) {
-                applyYunoSettings(YUNO_RATE_PRESETS[selectedPreset], true);
-            }
-            updateSettingsWarnings();
-            updateSettingsSummaryText();
-        });
-    }
-
-    resetYunoSettingsBtn?.addEventListener('click', () => {
-        applyYunoSettings(DEFAULT_YUNO_SETTINGS, true);
-        if (yunoRatePreset) {
-            yunoRatePreset.value = 'apr-2026';
-            persistSetting(yunoRatePreset.id, yunoRatePreset.value);
-        }
-        updateSettingsWarnings();
-        updateSettingsSummaryText();
-    });
-
-    exportYunoSettingsBtn?.addEventListener('click', () => {
-        const exportPayload = {
-            preset: yunoRatePreset?.value ?? 'custom',
-            yunoRateEffectiveDate: yunoRateEffectiveDate?.value ?? '',
-            rates: getCurrentYunoRates()
-        };
-        const blob = new Blob([JSON.stringify(exportPayload, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'yuno-rate-settings.json';
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        URL.revokeObjectURL(url);
-    });
-
-    importYunoSettingsBtn?.addEventListener('click', () => {
-        importYunoSettingsFile?.click();
-    });
-
-    importYunoSettingsFile?.addEventListener('change', (event) => {
-        const file = event.target.files?.[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = () => {
-            try {
-                const payload = JSON.parse(String(reader.result || '{}'));
-                applyYunoSettings({ ...payload.rates, yunoRateEffectiveDate: payload.yunoRateEffectiveDate || '' }, true);
-                if (yunoRatePreset) {
-                    yunoRatePreset.value = 'custom';
-                    persistSetting(yunoRatePreset.id, yunoRatePreset.value);
-                }
-                updateSettingsWarnings();
-                updateSettingsSummaryText();
-            } catch (_error) {
-                if (settingsWarning) {
-                    settingsWarning.style.display = 'block';
-                    settingsWarning.textContent = 'Could not import settings file. Please use a valid JSON export.';
-                }
-            }
-        };
-        reader.readAsText(file);
-        event.target.value = '';
-    });
-
-    updateSettingsWarnings();
-    updateSettingsSummaryText();
     let currentResults = null;
 
     function clearValidationErrors() {
@@ -456,31 +167,8 @@ function init() {
             return;
         }
 
-        // Extract rates
-        const rateVal = (inputEl) => {
-            const value = parseFloat(inputEl?.value ?? '');
-            return Number.isFinite(value) && value >= 0 ? value : 0;
-        };
-
-        const rates = {
-            yunoGasRate: rateVal(yunoGasRate),
-            yunoGasStanding: rateVal(yunoGasStanding),
-            yunoElecStdRate: rateVal(yunoElecStdRate),
-            yunoElecStdStanding: rateVal(yunoElecStdStanding),
-            yunoElecStdCashback: rateVal(yunoElecStdCashback),
-            yunoElecDnDayRate: rateVal(yunoElecDnDayRate),
-            yunoElecDnNightRate: rateVal(yunoElecDnNightRate),
-            yunoElecDnStanding: rateVal(yunoElecDnStanding),
-            yunoElecDnCashback: rateVal(yunoElecDnCashback),
-            yunoElecSmartDayRate: rateVal(yunoElecSmartDayRate),
-            yunoElecSmartNightRate: rateVal(yunoElecSmartNightRate),
-            yunoElecSmartPeakRate: rateVal(yunoElecSmartPeakRate),
-            yunoElecSmartStanding: rateVal(yunoElecSmartStanding),
-            yunoElecSmartCashback: rateVal(yunoElecSmartCashback),
-        };
-
         // Perform Calculation
-        currentResults = calculateSavings(data, rates);
+        currentResults = calculateSavings(data, DEFAULT_YUNO_SETTINGS);
         currentResults.fuelType = fuelType;
 
         // Reset toggle to annual view on new calculation
@@ -619,5 +307,5 @@ function calculateSavings(data, rates) {
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { calculateSavings, validateYunoValue, buildSettingsSummary, DEFAULT_YUNO_SETTINGS };
+    module.exports = { calculateSavings, DEFAULT_YUNO_SETTINGS };
 }
