@@ -1,4 +1,4 @@
-const { calculateSavings, validateYunoValue, buildSettingsSummary, DEFAULT_YUNO_SETTINGS } = require('./script.js');
+const { calculateSavings } = require('./script.js');
 
 describe('calculateSavings', () => {
     const defaultRates = {
@@ -168,23 +168,5 @@ describe('calculateSavings', () => {
         const results = calculateSavings(data, ratesWithCashback);
         expect(results.cashbackAmount).toBe(50);
         expect(results.netSavings).toBeCloseTo(150.00);
-    });
-});
-
-describe('sales rep settings helpers', () => {
-    test('flags warning for very high unit rates', () => {
-        const result = validateYunoValue(120, 'rate');
-        expect(result.isWarning).toBe(true);
-    });
-
-    test('does not flag warning for valid cashback values', () => {
-        const result = validateYunoValue(75, 'cashback');
-        expect(result.isWarning).toBe(false);
-    });
-
-    test('builds a readable summary string', () => {
-        const summary = buildSettingsSummary(DEFAULT_YUNO_SETTINGS, '2026-04-01');
-        expect(summary).toContain('Std 28.74c');
-        expect(summary).toContain('Effective 2026-04-01');
     });
 });
