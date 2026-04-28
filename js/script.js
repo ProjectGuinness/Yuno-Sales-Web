@@ -4,6 +4,7 @@ if (typeof document !== 'undefined') {
 
 function init() {
     const form = document.getElementById('calculator-form');
+    if (!form) return;
 
     // --- UI Toggles ---
     // Sales Rep Settings Toggle
@@ -11,18 +12,20 @@ function init() {
     const settingsContent = document.getElementById('settings-content');
     const settingsIcon = document.getElementById('settings-icon');
 
-    toggleSettingsBtn.addEventListener('click', () => {
-        const isExpanded = toggleSettingsBtn.getAttribute('aria-expanded') === 'true';
-        if (!isExpanded) {
-            settingsContent.style.display = 'block';
-            settingsIcon.textContent = '▲';
-            toggleSettingsBtn.setAttribute('aria-expanded', 'true');
-        } else {
-            settingsContent.style.display = 'none';
-            settingsIcon.textContent = '▼';
-            toggleSettingsBtn.setAttribute('aria-expanded', 'false');
-        }
-    });
+    if (toggleSettingsBtn && settingsContent && settingsIcon) {
+        toggleSettingsBtn.addEventListener('click', () => {
+            const isExpanded = toggleSettingsBtn.getAttribute('aria-expanded') === 'true';
+            if (!isExpanded) {
+                settingsContent.style.display = 'block';
+                settingsIcon.textContent = '▲';
+                toggleSettingsBtn.setAttribute('aria-expanded', 'true');
+            } else {
+                settingsContent.style.display = 'none';
+                settingsIcon.textContent = '▼';
+                toggleSettingsBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
 
     // Configuration Listeners
     const fuelTypeRadios = document.querySelectorAll('input[name="fuel-type"]');
@@ -115,6 +118,7 @@ function init() {
     }
 
     yunoInputs.forEach(input => {
+        if (!input) return;
         // Load saved value
         const savedVal = localStorage.getItem(input.id);
         if (savedVal !== null) {
@@ -195,21 +199,26 @@ function init() {
         }
 
         // Extract rates
+        const rateVal = (inputEl) => {
+            const value = parseFloat(inputEl?.value ?? '');
+            return Number.isFinite(value) && value >= 0 ? value : 0;
+        };
+
         const rates = {
-            yunoGasRate: parseFloat(yunoGasRate.value),
-            yunoGasStanding: parseFloat(yunoGasStanding.value),
-            yunoElecStdRate: parseFloat(yunoElecStdRate.value),
-            yunoElecStdStanding: parseFloat(yunoElecStdStanding.value),
-            yunoElecStdCashback: parseFloat(yunoElecStdCashback.value),
-            yunoElecDnDayRate: parseFloat(yunoElecDnDayRate.value),
-            yunoElecDnNightRate: parseFloat(yunoElecDnNightRate.value),
-            yunoElecDnStanding: parseFloat(yunoElecDnStanding.value),
-            yunoElecDnCashback: parseFloat(yunoElecDnCashback.value),
-            yunoElecSmartDayRate: parseFloat(yunoElecSmartDayRate.value),
-            yunoElecSmartNightRate: parseFloat(yunoElecSmartNightRate.value),
-            yunoElecSmartPeakRate: parseFloat(yunoElecSmartPeakRate.value),
-            yunoElecSmartStanding: parseFloat(yunoElecSmartStanding.value),
-            yunoElecSmartCashback: parseFloat(yunoElecSmartCashback.value),
+            yunoGasRate: rateVal(yunoGasRate),
+            yunoGasStanding: rateVal(yunoGasStanding),
+            yunoElecStdRate: rateVal(yunoElecStdRate),
+            yunoElecStdStanding: rateVal(yunoElecStdStanding),
+            yunoElecStdCashback: rateVal(yunoElecStdCashback),
+            yunoElecDnDayRate: rateVal(yunoElecDnDayRate),
+            yunoElecDnNightRate: rateVal(yunoElecDnNightRate),
+            yunoElecDnStanding: rateVal(yunoElecDnStanding),
+            yunoElecDnCashback: rateVal(yunoElecDnCashback),
+            yunoElecSmartDayRate: rateVal(yunoElecSmartDayRate),
+            yunoElecSmartNightRate: rateVal(yunoElecSmartNightRate),
+            yunoElecSmartPeakRate: rateVal(yunoElecSmartPeakRate),
+            yunoElecSmartStanding: rateVal(yunoElecSmartStanding),
+            yunoElecSmartCashback: rateVal(yunoElecSmartCashback),
         };
 
         // Perform Calculation
