@@ -167,37 +167,6 @@ input[type="number"]:focus {
     font-size: 0.85rem;
 }
 
-.settings-toolbar {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 0.85rem;
-    margin-bottom: 0.85rem;
-}
-
-.settings-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.65rem;
-    margin-bottom: 0.85rem;
-}
-
-.settings-actions button {
-    width: auto;
-    padding: 0.55rem 0.85rem;
-    font-size: 0.85rem;
-    box-shadow: none;
-}
-
-.settings-warning {
-    margin-bottom: 0.85rem;
-    border-radius: 8px;
-    border: 1px solid #facc15;
-    background: #fffbeb;
-    color: #92400e;
-    font-size: 0.82rem;
-    padding: 0.5rem 0.65rem;
-}
-
 /* Toggles & Radio Buttons */
 .config-section {
     background: var(--panel-bg);
@@ -403,11 +372,6 @@ input[type="date"]:focus {
 .input-error {
     border-color: var(--error-color) !important;
     box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.2) !important;
-}
-
-.input-warning {
-    border-color: #d97706 !important;
-    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.2) !important;
 }
 
 .fade-in {
