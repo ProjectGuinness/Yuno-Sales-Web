@@ -133,6 +133,14 @@
 
                     <hr class="divider">
 
+                    <div class="usage-average-toggle">
+                        <label class="checkbox-inline" for="use-national-average">
+                            <input type="checkbox" id="use-national-average" checked>
+                            Use national average usage figures
+                        </label>
+                        <small class="helper-text">Untick only if the customer has exact annual usage from their bill.</small>
+                    </div>
+
                     <!-- Electricity Inputs -->
                     <h3 class="section-title">Electricity Details</h3>
 
@@ -143,7 +151,7 @@
                                 <label for="current-elec-std-rate">Current Unit Rate (c)</label>
                                 <input type="number" id="current-elec-std-rate" step="0.01" min="0">
                             </div>
-                            <div class="input-group">
+                            <div class="input-group usage-input">
                                 <label for="elec-std-usage">Annual Usage (kWh)</label>
                                 <input type="number" id="elec-std-usage" value="4200" min="0">
                             </div>
@@ -161,7 +169,7 @@
                                 <label for="current-elec-dn-day-rate">Current Day Rate (c)</label>
                                 <input type="number" id="current-elec-dn-day-rate" step="0.01" min="0">
                             </div>
-                            <div class="input-group">
+                            <div class="input-group usage-input">
                                 <label for="elec-dn-day-usage">Annual Day Usage (kWh)</label>
                                 <input type="number" id="elec-dn-day-usage" value="2000" min="0">
                             </div>
@@ -171,7 +179,7 @@
                                 <label for="current-elec-dn-night-rate">Current Night Rate (c)</label>
                                 <input type="number" id="current-elec-dn-night-rate" step="0.01" min="0">
                             </div>
-                            <div class="input-group">
+                            <div class="input-group usage-input">
                                 <label for="elec-dn-night-usage">Annual Night Usage (kWh)</label>
                                 <input type="number" id="elec-dn-night-usage" value="2200" min="0">
                             </div>
@@ -189,7 +197,7 @@
                                 <label for="current-elec-smart-day-rate">Current Day Rate (c)</label>
                                 <input type="number" id="current-elec-smart-day-rate" step="0.01" min="0">
                             </div>
-                            <div class="input-group">
+                            <div class="input-group usage-input">
                                 <label for="elec-smart-day-usage">Annual Day Usage (kWh)</label>
                                 <input type="number" id="elec-smart-day-usage" value="2000" min="0">
                             </div>
@@ -199,7 +207,7 @@
                                 <label for="current-elec-smart-night-rate">Current Night Rate (c)</label>
                                 <input type="number" id="current-elec-smart-night-rate" step="0.01" min="0">
                             </div>
-                            <div class="input-group">
+                            <div class="input-group usage-input">
                                 <label for="elec-smart-night-usage">Annual Night Usage (kWh)</label>
                                 <input type="number" id="elec-smart-night-usage" value="1500" min="0">
                             </div>
@@ -209,7 +217,7 @@
                                 <label for="current-elec-smart-peak-rate">Current Peak Rate (c)</label>
                                 <input type="number" id="current-elec-smart-peak-rate" step="0.01" min="0">
                             </div>
-                            <div class="input-group">
+                            <div class="input-group usage-input">
                                 <label for="elec-smart-peak-usage">Annual Peak Usage (kWh)</label>
                                 <input type="number" id="elec-smart-peak-usage" value="700" min="0">
                             </div>
@@ -229,7 +237,7 @@
                                 <label for="current-gas-rate">Current Gas Unit Rate (c)</label>
                                 <input type="number" id="current-gas-rate" step="0.01" min="0">
                             </div>
-                            <div class="input-group">
+                            <div class="input-group usage-input">
                                 <label for="gas-usage">Annual Gas Usage (kWh)</label>
                                 <input type="number" id="gas-usage" value="11000" min="0">
                             </div>

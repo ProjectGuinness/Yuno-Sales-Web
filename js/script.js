@@ -35,6 +35,15 @@ function init() {
     const elecStandardInputs = document.getElementById('elec-standard-inputs');
     const elecDayNightInputs = document.getElementById('elec-daynight-inputs');
     const elecSmartInputs = document.getElementById('elec-smart-inputs');
+    const useNationalAverageCheckbox = document.getElementById('use-national-average');
+    const usageInputGroups = document.querySelectorAll('.usage-input');
+
+    function updateUsageInputVisibility() {
+        const useNationalAverage = useNationalAverageCheckbox?.checked;
+        usageInputGroups.forEach((group) => {
+            group.style.display = useNationalAverage ? 'none' : 'block';
+        });
+    }
 
     function updateFormVisibility() {
         const fuelType = document.querySelector('input[name="fuel-type"]:checked').value;
@@ -59,9 +68,11 @@ function init() {
 
     fuelTypeRadios.forEach(radio => radio.addEventListener('change', updateFormVisibility));
     meterTypeRadios.forEach(radio => radio.addEventListener('change', updateFormVisibility));
+    useNationalAverageCheckbox?.addEventListener('change', updateUsageInputVisibility);
 
     // Initialize visibility
     updateFormVisibility();
+    updateUsageInputVisibility();
 
     // --- Main Logic ---
     const errorMessage = document.getElementById('error-message');
@@ -151,14 +162,21 @@ function init() {
         const fuelType = document.querySelector('input[name="fuel-type"]:checked').value;
         const meterType = document.querySelector('input[name="meter-type"]:checked').value;
         const inContract = document.getElementById('in-contract').checked;
+        const useNationalAverage = useNationalAverageCheckbox?.checked ?? false;
 
         let isValid = true;
         const data = { fuelType, meterType, inContract };
 
         // Helper to parse and validate, highlighting errors
-        const getVal = (id) => {
+        const getVal = (id, allowEmpty = false) => {
             const el = document.getElementById(id);
-            const val = parseFloat(el.value);
+            const rawValue = el.value.trim();
+
+            if (allowEmpty && rawValue === '') {
+                return parseFloat(el.defaultValue || '0');
+            }
+
+            const val = parseFloat(rawValue);
             if (isNaN(val) || val < 0) {
                 isValid = false;
                 el.classList.add('input-error');
@@ -169,27 +187,27 @@ function init() {
         // Extract input values
         if (meterType === 'standard') {
             data.cElecStdRate = getVal('current-elec-std-rate');
-            data.elecStdUsage = getVal('elec-std-usage');
+            data.elecStdUsage = getVal('elec-std-usage', useNationalAverage);
             data.cElecStdStanding = getVal('current-elec-std-standing');
         } else if (meterType === 'daynight') {
             data.cElecDnDayRate = getVal('current-elec-dn-day-rate');
-            data.elecDnDayUsage = getVal('elec-dn-day-usage');
+            data.elecDnDayUsage = getVal('elec-dn-day-usage', useNationalAverage);
             data.cElecDnNightRate = getVal('current-elec-dn-night-rate');
-            data.elecDnNightUsage = getVal('elec-dn-night-usage');
+            data.elecDnNightUsage = getVal('elec-dn-night-usage', useNationalAverage);
             data.cElecDnStanding = getVal('current-elec-dn-standing');
         } else if (meterType === 'smart') {
             data.cElecSmartDayRate = getVal('current-elec-smart-day-rate');
-            data.elecSmartDayUsage = getVal('elec-smart-day-usage');
+            data.elecSmartDayUsage = getVal('elec-smart-day-usage', useNationalAverage);
             data.cElecSmartNightRate = getVal('current-elec-smart-night-rate');
-            data.elecSmartNightUsage = getVal('elec-smart-night-usage');
+            data.elecSmartNightUsage = getVal('elec-smart-night-usage', useNationalAverage);
             data.cElecSmartPeakRate = getVal('current-elec-smart-peak-rate');
-            data.elecSmartPeakUsage = getVal('elec-smart-peak-usage');
+            data.elecSmartPeakUsage = getVal('elec-smart-peak-usage', useNationalAverage);
             data.cElecSmartStanding = getVal('current-elec-smart-standing');
         }
 
         if (fuelType === 'dual') {
             data.cGasRate = getVal('current-gas-rate');
-            data.gasUsage = getVal('gas-usage');
+            data.gasUsage = getVal('gas-usage', useNationalAverage);
             data.cGasStanding = getVal('current-gas-standing');
         }
 
