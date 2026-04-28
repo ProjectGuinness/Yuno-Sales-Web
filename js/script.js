@@ -23,6 +23,25 @@ function init() {
     const form = document.getElementById('calculator-form');
     if (!form) return;
 
+    const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
+    const settingsContent = document.getElementById('settings-content');
+    const settingsIcon = document.getElementById('settings-icon');
+
+    if (toggleSettingsBtn && settingsContent && settingsIcon) {
+        toggleSettingsBtn.addEventListener('click', () => {
+            const isExpanded = toggleSettingsBtn.getAttribute('aria-expanded') === 'true';
+            if (isExpanded) {
+                settingsContent.style.display = 'none';
+                settingsIcon.textContent = '▼';
+                toggleSettingsBtn.setAttribute('aria-expanded', 'false');
+            } else {
+                settingsContent.style.display = 'block';
+                settingsIcon.textContent = '▲';
+                toggleSettingsBtn.setAttribute('aria-expanded', 'true');
+            }
+        });
+    }
+
     // Configuration Listeners
     const fuelTypeRadios = document.querySelectorAll('input[name="fuel-type"]');
     const meterTypeRadios = document.querySelectorAll('input[name="meter-type"]');
@@ -90,6 +109,22 @@ function init() {
     const breakdownCashbackVal = breakdownCashback.querySelector('.value');
     const breakdownPenalty = document.getElementById('breakdown-penalty');
     const breakdownPenaltyVal = breakdownPenalty.querySelector('.value');
+
+    // Yuno Settings Inputs
+    const yunoGasRate = document.getElementById('yuno-gas-rate');
+    const yunoGasStanding = document.getElementById('yuno-gas-standing');
+    const yunoElecStdRate = document.getElementById('yuno-elec-std-rate');
+    const yunoElecStdStanding = document.getElementById('yuno-elec-std-standing');
+    const yunoElecStdCashback = document.getElementById('yuno-elec-std-cashback');
+    const yunoElecDnDayRate = document.getElementById('yuno-elec-dn-day-rate');
+    const yunoElecDnNightRate = document.getElementById('yuno-elec-dn-night-rate');
+    const yunoElecDnStanding = document.getElementById('yuno-elec-dn-standing');
+    const yunoElecDnCashback = document.getElementById('yuno-elec-dn-cashback');
+    const yunoElecSmartDayRate = document.getElementById('yuno-elec-smart-day-rate');
+    const yunoElecSmartNightRate = document.getElementById('yuno-elec-smart-night-rate');
+    const yunoElecSmartPeakRate = document.getElementById('yuno-elec-smart-peak-rate');
+    const yunoElecSmartStanding = document.getElementById('yuno-elec-smart-standing');
+    const yunoElecSmartCashback = document.getElementById('yuno-elec-smart-cashback');
 
     let currentResults = null;
 
@@ -161,6 +196,40 @@ function init() {
             data.gasUsage = getVal('gas-usage', useNationalAverage);
             data.cGasStanding = getVal('current-gas-standing');
         }
+
+        if (!isValid) {
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        const getRate = (input, fallback) => {
+            const value = parseFloat(input?.value ?? '');
+            if (Number.isFinite(value) && value >= 0) {
+                return value;
+            }
+            if (input) {
+                isValid = false;
+                input.classList.add('input-error');
+            }
+            return fallback;
+        };
+
+        const rates = {
+            yunoGasRate: getRate(yunoGasRate, DEFAULT_YUNO_SETTINGS.yunoGasRate),
+            yunoGasStanding: getRate(yunoGasStanding, DEFAULT_YUNO_SETTINGS.yunoGasStanding),
+            yunoElecStdRate: getRate(yunoElecStdRate, DEFAULT_YUNO_SETTINGS.yunoElecStdRate),
+            yunoElecStdStanding: getRate(yunoElecStdStanding, DEFAULT_YUNO_SETTINGS.yunoElecStdStanding),
+            yunoElecStdCashback: getRate(yunoElecStdCashback, DEFAULT_YUNO_SETTINGS.yunoElecStdCashback),
+            yunoElecDnDayRate: getRate(yunoElecDnDayRate, DEFAULT_YUNO_SETTINGS.yunoElecDnDayRate),
+            yunoElecDnNightRate: getRate(yunoElecDnNightRate, DEFAULT_YUNO_SETTINGS.yunoElecDnNightRate),
+            yunoElecDnStanding: getRate(yunoElecDnStanding, DEFAULT_YUNO_SETTINGS.yunoElecDnStanding),
+            yunoElecDnCashback: getRate(yunoElecDnCashback, DEFAULT_YUNO_SETTINGS.yunoElecDnCashback),
+            yunoElecSmartDayRate: getRate(yunoElecSmartDayRate, DEFAULT_YUNO_SETTINGS.yunoElecSmartDayRate),
+            yunoElecSmartNightRate: getRate(yunoElecSmartNightRate, DEFAULT_YUNO_SETTINGS.yunoElecSmartNightRate),
+            yunoElecSmartPeakRate: getRate(yunoElecSmartPeakRate, DEFAULT_YUNO_SETTINGS.yunoElecSmartPeakRate),
+            yunoElecSmartStanding: getRate(yunoElecSmartStanding, DEFAULT_YUNO_SETTINGS.yunoElecSmartStanding),
+            yunoElecSmartCashback: getRate(yunoElecSmartCashback, DEFAULT_YUNO_SETTINGS.yunoElecSmartCashback),
+        };
 
         if (!isValid) {
             errorMessage.style.display = 'block';

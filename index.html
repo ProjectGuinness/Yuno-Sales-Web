@@ -19,6 +19,86 @@
         </header>
 
         <main>
+            <div class="card sales-rep-settings">
+                <button class="settings-header" id="toggle-settings-btn" aria-expanded="false" aria-controls="settings-content" type="button">
+                    <h2>⚙️ Sales Rep Settings (Yuno Rates)</h2>
+                    <span id="settings-icon">▼</span>
+                </button>
+                <p class="settings-summary">Set Yuno rates for this quote.</p>
+                <div id="settings-content" style="display: none;">
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="yuno-gas-rate">Yuno Gas Unit Rate (c)</label>
+                            <input type="number" id="yuno-gas-rate" value="8.71" step="0.01" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="yuno-gas-standing">Yuno Gas Standing Charge (€)</label>
+                            <input type="number" id="yuno-gas-standing" value="137.64" step="0.01" min="0">
+                        </div>
+                    </div>
+
+                    <h3>Electricity (Standard 24hr)</h3>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="yuno-elec-std-rate">Yuno Unit Rate (c)</label>
+                            <input type="number" id="yuno-elec-std-rate" value="28.74" step="0.01" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="yuno-elec-std-standing">Yuno Standing Charge (€)</label>
+                            <input type="number" id="yuno-elec-std-standing" value="201.12" step="0.01" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="yuno-elec-std-cashback">Yuno Cashback (€)</label>
+                            <input type="number" id="yuno-elec-std-cashback" value="60.00" step="0.01" min="0">
+                        </div>
+                    </div>
+
+                    <h3>Electricity (Day / Night)</h3>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="yuno-elec-dn-day-rate">Yuno Day Rate (c)</label>
+                            <input type="number" id="yuno-elec-dn-day-rate" value="31.34" step="0.01" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="yuno-elec-dn-night-rate">Yuno Night Rate (c)</label>
+                            <input type="number" id="yuno-elec-dn-night-rate" value="18.94" step="0.01" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="yuno-elec-dn-standing">Yuno Standing Charge (€)</label>
+                            <input type="number" id="yuno-elec-dn-standing" value="227.47" step="0.01" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="yuno-elec-dn-cashback">Yuno Cashback (€)</label>
+                            <input type="number" id="yuno-elec-dn-cashback" value="60.00" step="0.01" min="0">
+                        </div>
+                    </div>
+
+                    <h3>Electricity (Smart: Day/Night/Peak)</h3>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="yuno-elec-smart-day-rate">Yuno Day Rate (c)</label>
+                            <input type="number" id="yuno-elec-smart-day-rate" value="30.91" step="0.01" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="yuno-elec-smart-night-rate">Yuno Night Rate (c)</label>
+                            <input type="number" id="yuno-elec-smart-night-rate" value="18.91" step="0.01" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="yuno-elec-smart-peak-rate">Yuno Peak Rate (c)</label>
+                            <input type="number" id="yuno-elec-smart-peak-rate" value="33.54" step="0.01" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="yuno-elec-smart-standing">Yuno Standing Charge (€)</label>
+                            <input type="number" id="yuno-elec-smart-standing" value="216.30" step="0.01" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="yuno-elec-smart-cashback">Yuno Cashback (€)</label>
+                            <input type="number" id="yuno-elec-smart-cashback" value="75.00" step="0.01" min="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card">
                 <form id="calculator-form">
 

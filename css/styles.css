@@ -121,6 +121,52 @@ input[type="number"]:focus {
     box-shadow: 0 0 0 4px var(--focus-ring);
 }
 
+/* Sales Rep Settings */
+.sales-rep-settings {
+    background: var(--panel-bg);
+    border: 1px solid #cfd9e8;
+    margin-bottom: 1.5rem;
+    box-shadow: none;
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
+    font-family: inherit;
+}
+
+.settings-header h2 {
+    font-size: 1.1rem;
+    margin: 0;
+    color: #253146;
+}
+
+#settings-content {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6;
+}
+
+#settings-content h3 {
+    font-size: 0.95rem;
+    color: #495057;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.settings-summary {
+    margin: 0.5rem 0 0;
+    color: #5f6f86;
+    font-size: 0.85rem;
+}
+
 /* Toggles & Radio Buttons */
 .config-section {
     background: var(--panel-bg);
