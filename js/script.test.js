@@ -25,20 +25,20 @@ describe('calculateSavings', () => {
             inContract: false,
             elecStdUsage: 4200,
             cElecStdRate: 30.00, // Current rate
-            cElecStdStanding: 250.00 // Current standing
+            cElecStdStanding: 0.68 // Current daily standing
         };
 
-        // Expected Current Cost: (4200 * 30 / 100) + 250 = 1260 + 250 = 1510
+        // Expected Current Cost: (4200 * 30 / 100) + (0.68 * 365) = 1260 + 248.20 = 1508.20
         // Expected Yuno Cost: (4200 * 28.74 / 100) + 201.12 = 1207.08 + 201.12 = 1408.20
-        // Expected Elec Savings: 1510 - 1408.20 = 101.80
-        // Net Savings: 101.80
+        // Expected Elec Savings: 1508.20 - 1408.20 = 100.00
+        // Net Savings: 100.00
 
         const results = calculateSavings(data, defaultRates);
-        expect(results.elecSavings).toBeCloseTo(101.80);
+        expect(results.elecSavings).toBeCloseTo(100.00);
         expect(results.gasSavings).toBe(0);
         expect(results.cashbackAmount).toBe(0);
         expect(results.penaltyAmount).toBe(0);
-        expect(results.netSavings).toBeCloseTo(101.80);
+        expect(results.netSavings).toBeCloseTo(100.00);
     });
 
     test('calculates day/night meter savings correctly (Single Fuel)', () => {
@@ -50,16 +50,16 @@ describe('calculateSavings', () => {
             elecDnNightUsage: 2200,
             cElecDnDayRate: 35.00,
             cElecDnNightRate: 20.00,
-            cElecDnStanding: 280.00
+            cElecDnStanding: 0.77
         };
 
-        // Expected Current Cost: ((2000*35 + 2200*20) / 100) + 280 = (70000 + 44000)/100 + 280 = 1140 + 280 = 1420
+        // Expected Current Cost: ((2000*35 + 2200*20) / 100) + (0.77 * 365) = 1140 + 281.05 = 1421.05
         // Expected Yuno Cost: ((2000*31.34 + 2200*18.94) / 100) + 227.47 = (62680 + 41668)/100 + 227.47 = 1043.48 + 227.47 = 1270.95
-        // Expected Elec Savings: 1420 - 1270.95 = 149.05
+        // Expected Elec Savings: 1421.05 - 1270.95 = 150.10
 
         const results = calculateSavings(data, defaultRates);
-        expect(results.elecSavings).toBeCloseTo(149.05);
-        expect(results.netSavings).toBeCloseTo(149.05);
+        expect(results.elecSavings).toBeCloseTo(150.10);
+        expect(results.netSavings).toBeCloseTo(150.10);
     });
 
     test('calculates smart meter savings correctly (Single Fuel)', () => {
@@ -73,16 +73,16 @@ describe('calculateSavings', () => {
             cElecSmartDayRate: 35.00,
             cElecSmartNightRate: 20.00,
             cElecSmartPeakRate: 40.00,
-            cElecSmartStanding: 250.00
+            cElecSmartStanding: 0.68
         };
 
-        // Expected Current Cost: ((2000*35 + 1500*20 + 700*40) / 100) + 250 = (70000 + 30000 + 28000)/100 + 250 = 1280 + 250 = 1530
+        // Expected Current Cost: ((2000*35 + 1500*20 + 700*40) / 100) + (0.68 * 365) = 1280 + 248.20 = 1528.20
         // Expected Yuno Cost: ((2000*30.91 + 1500*18.91 + 700*33.54) / 100) + 216.30 = (61820 + 28365 + 23478)/100 + 216.30 = 1136.63 + 216.30 = 1352.93
-        // Expected Elec Savings: 1530 - 1352.93 = 177.07
+        // Expected Elec Savings: 1528.20 - 1352.93 = 175.27
 
         const results = calculateSavings(data, defaultRates);
-        expect(results.elecSavings).toBeCloseTo(177.07);
-        expect(results.netSavings).toBeCloseTo(177.07);
+        expect(results.elecSavings).toBeCloseTo(175.27);
+        expect(results.netSavings).toBeCloseTo(175.27);
     });
 
     test('calculates dual fuel savings correctly', () => {
@@ -92,22 +92,22 @@ describe('calculateSavings', () => {
             inContract: false,
             elecStdUsage: 4200,
             cElecStdRate: 30.00,
-            cElecStdStanding: 250.00,
+            cElecStdStanding: 0.68,
             gasUsage: 11000,
             cGasRate: 10.00,
-            cGasStanding: 150.00
+            cGasStanding: 0.41
         };
 
-        // Elec Savings: 101.80 (from first test)
-        // Expected Current Gas Cost: (11000 * 10 / 100) + 150 = 1100 + 150 = 1250
+        // Elec Savings: 100.00 (from first test)
+        // Expected Current Gas Cost: (11000 * 10 / 100) + (0.41 * 365) = 1100 + 149.65 = 1249.65
         // Expected Yuno Gas Cost: (11000 * 8.71 / 100) + 137.64 = 958.10 + 137.64 = 1095.74
-        // Expected Gas Savings: 1250 - 1095.74 = 154.26
-        // Total Savings: 101.80 + 154.26 = 256.06
+        // Expected Gas Savings: 1249.65 - 1095.74 = 153.91
+        // Total Savings: 100.00 + 153.91 = 253.91
 
         const results = calculateSavings(data, defaultRates);
-        expect(results.elecSavings).toBeCloseTo(101.80);
-        expect(results.gasSavings).toBeCloseTo(154.26);
-        expect(results.netSavings).toBeCloseTo(256.06);
+        expect(results.elecSavings).toBeCloseTo(100.00);
+        expect(results.gasSavings).toBeCloseTo(153.91);
+        expect(results.netSavings).toBeCloseTo(253.91);
     });
 
     test('applies penalty when in contract', () => {
@@ -117,16 +117,16 @@ describe('calculateSavings', () => {
             inContract: true,
             elecStdUsage: 4200,
             cElecStdRate: 30.00,
-            cElecStdStanding: 250.00
+            cElecStdStanding: 0.68
         };
 
-        // Savings before penalty: 101.80
+        // Savings before penalty: 100.00
         // Penalty for single fuel: 50
-        // Net: 51.80
+        // Net: 50.00
 
         const results = calculateSavings(data, defaultRates);
         expect(results.penaltyAmount).toBe(50);
-        expect(results.netSavings).toBeCloseTo(51.80);
+        expect(results.netSavings).toBeCloseTo(50.00);
     });
 
     test('applies dual fuel penalty when in contract', () => {
@@ -136,19 +136,19 @@ describe('calculateSavings', () => {
             inContract: true,
             elecStdUsage: 4200,
             cElecStdRate: 30.00,
-            cElecStdStanding: 250.00,
+            cElecStdStanding: 0.68,
             gasUsage: 11000,
             cGasRate: 10.00,
-            cGasStanding: 150.00
+            cGasStanding: 0.41
         };
 
-        // Savings before penalty: 256.06
+        // Savings before penalty: 253.91
         // Penalty for dual fuel: 100
-        // Net: 156.06
+        // Net: 153.91
 
         const results = calculateSavings(data, defaultRates);
         expect(results.penaltyAmount).toBe(100);
-        expect(results.netSavings).toBeCloseTo(156.06);
+        expect(results.netSavings).toBeCloseTo(153.91);
     });
 
     test('applies cashback', () => {
@@ -159,14 +159,14 @@ describe('calculateSavings', () => {
             inContract: false,
             elecStdUsage: 4200,
             cElecStdRate: 30.00,
-            cElecStdStanding: 250.00
+            cElecStdStanding: 0.68
         };
 
-        // Savings before cashback: 101.80
-        // Net: 151.80
+        // Savings before cashback: 100.00
+        // Net: 150.00
 
         const results = calculateSavings(data, ratesWithCashback);
         expect(results.cashbackAmount).toBe(50);
-        expect(results.netSavings).toBeCloseTo(151.80);
+        expect(results.netSavings).toBeCloseTo(150.00);
     });
 });
