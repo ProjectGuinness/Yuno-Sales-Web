@@ -161,6 +161,43 @@ input[type="number"]:focus {
     margin-bottom: 0.5rem;
 }
 
+.settings-summary {
+    margin: 0.5rem 0 0;
+    color: #5f6f86;
+    font-size: 0.85rem;
+}
+
+.settings-toolbar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.85rem;
+    margin-bottom: 0.85rem;
+}
+
+.settings-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-bottom: 0.85rem;
+}
+
+.settings-actions button {
+    width: auto;
+    padding: 0.55rem 0.85rem;
+    font-size: 0.85rem;
+    box-shadow: none;
+}
+
+.settings-warning {
+    margin-bottom: 0.85rem;
+    border-radius: 8px;
+    border: 1px solid #facc15;
+    background: #fffbeb;
+    color: #92400e;
+    font-size: 0.82rem;
+    padding: 0.5rem 0.65rem;
+}
+
 /* Toggles & Radio Buttons */
 .config-section {
     background: var(--panel-bg);
@@ -336,6 +373,24 @@ input[type="number"]::placeholder {
     color: #999;
 }
 
+select,
+input[type="date"] {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    border-radius: 10px;
+    border: 1px solid #d6dde8;
+    background-color: #ffffff;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+select:focus,
+input[type="date"]:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
 .error-message {
     color: var(--error-color);
     font-size: 0.9rem;
@@ -348,6 +403,11 @@ input[type="number"]::placeholder {
 .input-error {
     border-color: var(--error-color) !important;
     box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.2) !important;
+}
+
+.input-warning {
+    border-color: #d97706 !important;
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.2) !important;
 }
 
 .fade-in {
@@ -415,6 +475,18 @@ button:active, .btn-cta:active {
 }
 
 .btn-reset:hover {
+    background-color: #f9fafb;
+    border-color: #d1d5db;
+    color: var(--text-color);
+}
+
+.btn-secondary {
+    background: linear-gradient(180deg, #ffffff 0%, #f5f8fd 100%);
+    color: #506079;
+    border: 1px solid #cfd9e8;
+}
+
+.btn-secondary:hover {
     background-color: #f9fafb;
     border-color: #d1d5db;
     color: var(--text-color);
