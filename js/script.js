@@ -329,23 +329,20 @@ function init() {
 
 // --- Calculation Logic (Separated for Testing) ---
 function calculateSavings(data, rates) {
-    const DAYS_IN_YEAR = 365;
-    const annualizeStandingCharge = (dailyStandingCharge) => dailyStandingCharge * DAYS_IN_YEAR;
-
     let currentElecCost = 0;
     let yunoElecCost = 0;
     let cashbackAmount = 0;
 
     if (data.meterType === 'standard') {
-        currentElecCost = ((data.elecStdUsage * data.cElecStdRate) / 100) + annualizeStandingCharge(data.cElecStdStanding);
+        currentElecCost = ((data.elecStdUsage * data.cElecStdRate) / 100) + data.cElecStdStanding;
         yunoElecCost = ((data.elecStdUsage * rates.yunoElecStdRate) / 100) + rates.yunoElecStdStanding;
         cashbackAmount = rates.yunoElecStdCashback;
     } else if (data.meterType === 'daynight') {
-        currentElecCost = (((data.elecDnDayUsage * data.cElecDnDayRate) + (data.elecDnNightUsage * data.cElecDnNightRate)) / 100) + annualizeStandingCharge(data.cElecDnStanding);
+        currentElecCost = (((data.elecDnDayUsage * data.cElecDnDayRate) + (data.elecDnNightUsage * data.cElecDnNightRate)) / 100) + data.cElecDnStanding;
         yunoElecCost = (((data.elecDnDayUsage * rates.yunoElecDnDayRate) + (data.elecDnNightUsage * rates.yunoElecDnNightRate)) / 100) + rates.yunoElecDnStanding;
         cashbackAmount = rates.yunoElecDnCashback;
     } else if (data.meterType === 'smart') {
-        currentElecCost = (((data.elecSmartDayUsage * data.cElecSmartDayRate) + (data.elecSmartNightUsage * data.cElecSmartNightRate) + (data.elecSmartPeakUsage * data.cElecSmartPeakRate)) / 100) + annualizeStandingCharge(data.cElecSmartStanding);
+        currentElecCost = (((data.elecSmartDayUsage * data.cElecSmartDayRate) + (data.elecSmartNightUsage * data.cElecSmartNightRate) + (data.elecSmartPeakUsage * data.cElecSmartPeakRate)) / 100) + data.cElecSmartStanding;
         yunoElecCost = (((data.elecSmartDayUsage * rates.yunoElecSmartDayRate) + (data.elecSmartNightUsage * rates.yunoElecSmartNightRate) + (data.elecSmartPeakUsage * rates.yunoElecSmartPeakRate)) / 100) + rates.yunoElecSmartStanding;
         cashbackAmount = rates.yunoElecSmartCashback;
     }
@@ -354,7 +351,7 @@ function calculateSavings(data, rates) {
 
     let gasSavings = 0;
     if (data.fuelType === 'dual') {
-        const currentGasCost = ((data.gasUsage * data.cGasRate) / 100) + annualizeStandingCharge(data.cGasStanding);
+        const currentGasCost = ((data.gasUsage * data.cGasRate) / 100) + data.cGasStanding;
         const yunoGasCost = ((data.gasUsage * rates.yunoGasRate) / 100) + rates.yunoGasStanding;
         gasSavings = currentGasCost - yunoGasCost;
     }

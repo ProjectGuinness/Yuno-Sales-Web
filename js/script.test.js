@@ -25,10 +25,10 @@ describe('calculateSavings', () => {
             inContract: false,
             elecStdUsage: 4200,
             cElecStdRate: 30.00, // Current rate
-            cElecStdStanding: 0.68 // Current daily standing
+            cElecStdStanding: 248.20 // Current annual standing
         };
 
-        // Expected Current Cost: (4200 * 30 / 100) + (0.68 * 365) = 1260 + 248.20 = 1508.20
+        // Expected Current Cost: (4200 * 30 / 100) + 248.20 = 1260 + 248.20 = 1508.20
         // Expected Yuno Cost: (4200 * 28.74 / 100) + 201.12 = 1207.08 + 201.12 = 1408.20
         // Expected Elec Savings: 1508.20 - 1408.20 = 100.00
         // Net Savings: 100.00
@@ -50,10 +50,10 @@ describe('calculateSavings', () => {
             elecDnNightUsage: 2200,
             cElecDnDayRate: 35.00,
             cElecDnNightRate: 20.00,
-            cElecDnStanding: 0.77
+            cElecDnStanding: 281.05
         };
 
-        // Expected Current Cost: ((2000*35 + 2200*20) / 100) + (0.77 * 365) = 1140 + 281.05 = 1421.05
+        // Expected Current Cost: ((2000*35 + 2200*20) / 100) + 281.05 = 1140 + 281.05 = 1421.05
         // Expected Yuno Cost: ((2000*31.34 + 2200*18.94) / 100) + 227.47 = (62680 + 41668)/100 + 227.47 = 1043.48 + 227.47 = 1270.95
         // Expected Elec Savings: 1421.05 - 1270.95 = 150.10
 
@@ -73,10 +73,10 @@ describe('calculateSavings', () => {
             cElecSmartDayRate: 35.00,
             cElecSmartNightRate: 20.00,
             cElecSmartPeakRate: 40.00,
-            cElecSmartStanding: 0.68
+            cElecSmartStanding: 248.20
         };
 
-        // Expected Current Cost: ((2000*35 + 1500*20 + 700*40) / 100) + (0.68 * 365) = 1280 + 248.20 = 1528.20
+        // Expected Current Cost: ((2000*35 + 1500*20 + 700*40) / 100) + 248.20 = 1280 + 248.20 = 1528.20
         // Expected Yuno Cost: ((2000*30.91 + 1500*18.91 + 700*33.54) / 100) + 216.30 = (61820 + 28365 + 23478)/100 + 216.30 = 1136.63 + 216.30 = 1352.93
         // Expected Elec Savings: 1528.20 - 1352.93 = 175.27
 
@@ -92,14 +92,14 @@ describe('calculateSavings', () => {
             inContract: false,
             elecStdUsage: 4200,
             cElecStdRate: 30.00,
-            cElecStdStanding: 0.68,
+            cElecStdStanding: 248.20,
             gasUsage: 11000,
             cGasRate: 10.00,
-            cGasStanding: 0.41
+            cGasStanding: 149.65
         };
 
         // Elec Savings: 100.00 (from first test)
-        // Expected Current Gas Cost: (11000 * 10 / 100) + (0.41 * 365) = 1100 + 149.65 = 1249.65
+        // Expected Current Gas Cost: (11000 * 10 / 100) + 149.65 = 1100 + 149.65 = 1249.65
         // Expected Yuno Gas Cost: (11000 * 8.71 / 100) + 137.64 = 958.10 + 137.64 = 1095.74
         // Expected Gas Savings: 1249.65 - 1095.74 = 153.91
         // Total Savings: 100.00 + 153.91 = 253.91
@@ -117,7 +117,7 @@ describe('calculateSavings', () => {
             inContract: true,
             elecStdUsage: 4200,
             cElecStdRate: 30.00,
-            cElecStdStanding: 0.68
+            cElecStdStanding: 248.20
         };
 
         // Savings before penalty: 100.00
@@ -136,10 +136,10 @@ describe('calculateSavings', () => {
             inContract: true,
             elecStdUsage: 4200,
             cElecStdRate: 30.00,
-            cElecStdStanding: 0.68,
+            cElecStdStanding: 248.20,
             gasUsage: 11000,
             cGasRate: 10.00,
-            cGasStanding: 0.41
+            cGasStanding: 149.65
         };
 
         // Savings before penalty: 253.91
@@ -159,7 +159,7 @@ describe('calculateSavings', () => {
             inContract: false,
             elecStdUsage: 4200,
             cElecStdRate: 30.00,
-            cElecStdStanding: 0.68
+            cElecStdStanding: 248.20
         };
 
         // Savings before cashback: 100.00
