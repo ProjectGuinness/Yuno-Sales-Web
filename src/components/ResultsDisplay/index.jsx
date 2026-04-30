@@ -78,6 +78,14 @@ export default function ResultsDisplay({ results, config, isMonthly, onToggleMon
           >
             Switch &amp; Start Saving →
           </a>
+
+          <p className={styles.disclaimer}>
+            This is an independent estimate and is not an official quote. Figures are based on
+            information provided and exclude VAT. Actual savings may vary.
+          </p>
+          <p className={styles.rateValidity}>
+            Rates used in this calculation were correct at the time this estimate was produced.
+          </p>
         </>
       ) : (
         <>
@@ -112,6 +120,14 @@ export default function ResultsDisplay({ results, config, isMonthly, onToggleMon
           </div>
           <p className={styles.savingsLabel}>
             Net {net < 0 ? 'cost' : 'savings'} in Year 1{isMonthly ? ' (monthly)' : ''}
+          </p>
+
+          <p className={styles.disclaimer}>
+            This is an independent estimate and is not an official quote. Figures are based on
+            information provided and exclude VAT. Actual savings may vary.
+          </p>
+          <p className={styles.rateValidity}>
+            Rates used in this calculation were correct at the time this estimate was produced.
           </p>
         </>
       )}
