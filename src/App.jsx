@@ -3,6 +3,7 @@ import SettingsPanel from './components/SettingsPanel'
 import CustomerConfig from './components/CustomerConfig'
 import RateInputs from './components/RateInputs'
 import ResultsDisplay from './components/ResultsDisplay'
+import SavingsCard from './components/SavingsCard'
 import { calculateSavings, DEFAULT_YUNO_SETTINGS, NATIONAL_AVERAGES } from './utils/calculations'
 import styles from './App.module.css'
 
@@ -123,12 +124,8 @@ export default function App() {
   return (
     <div className={styles.app}>
       <header className={styles.header}>
-        <div className={styles.brand}>
-          <span className={styles.brandName}>yuno</span>
-          <span className={styles.brandTag}>energy</span>
-        </div>
         <h1 className={styles.title}>Savings Calculator</h1>
-        <p className={styles.subtitle}>See how much you could save by switching to Yuno.</p>
+        <p className={styles.subtitle}>See how much you could save on your energy bills.</p>
       </header>
 
       <div className={styles.content}>
@@ -180,6 +177,9 @@ export default function App() {
               isMonthly={isMonthly}
               onToggleMonthly={() => setIsMonthly(m => !m)}
             />
+            {results.netSavings > 0 && (
+              <SavingsCard results={results} config={config} />
+            )}
           </div>
         )}
       </div>
