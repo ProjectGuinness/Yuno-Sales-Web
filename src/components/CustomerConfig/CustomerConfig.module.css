@@ -1,0 +1,131 @@
+.section {
+  background: var(--panel-bg);
+  border-radius: var(--radius-sm);
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--border);
+  margin-bottom: 0.25rem;
+}
+
+.kicker {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.field {
+  margin-bottom: 1.1rem;
+}
+
+.fieldLast {
+  margin-bottom: 0;
+}
+
+.fieldLabel {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.helper {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: -0.25rem;
+}
+
+/* Segmented control */
+.segmented {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.segment {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 1rem;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  user-select: none;
+}
+
+.segment input {
+  display: none;
+}
+
+.segment:hover {
+  border-color: #9aacbe;
+  color: var(--text);
+}
+
+.segmentActive {
+  border-color: var(--green);
+  background: linear-gradient(160deg, rgba(0, 166, 81, 0.12) 0%, rgba(0, 166, 81, 0.06) 100%);
+  color: var(--navy);
+  font-weight: 600;
+  box-shadow: 0 0 0 1px rgba(0, 166, 81, 0.15);
+}
+
+/* Toggle switch */
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.toggleInput {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleTrack {
+  position: relative;
+  display: block;
+  width: 48px;
+  height: 26px;
+  border-radius: 13px;
+  background: #cdd5de;
+  transition: background 0.2s;
+}
+
+.toggleTrackOn {
+  background: var(--green);
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s;
+}
+
+.toggleTrackOn .toggleThumb {
+  transform: translateX(22px);
+}
