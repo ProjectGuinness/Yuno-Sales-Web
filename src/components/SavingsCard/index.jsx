@@ -1,32 +1,17 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import html2canvas from 'html2canvas'
 import styles from './SavingsCard.module.css'
 
-function getPlanLabel(config) {
-  const fuel = config.fuelType === 'dual' ? 'Dual Fuel' : 'Electricity Only'
-  const meter =
-    config.meterType === 'standard'
-      ? 'Standard'
-      : config.meterType === 'daynight'
-      ? 'Day/Night'
-      : 'Smart'
-  return `${fuel} — ${meter}`
-}
-
-export default function SavingsCard({ results, config }) {
-  const { elecSavings, gasSavings, cashbackAmount, penaltyAmount, netSavings } = results
-  const cardRef = useRef(null)
+export default function SavingsCard({ captureRef, results }) {
+  const { netSavings } = results
   const [toast, setToast] = useState(false)
   const [capturing, setCapturing] = useState(false)
 
-  const weekly = netSavings / 52
-  const planLabel = getPlanLabel(config)
-
   async function handleSaveImage() {
-    if (!cardRef.current || capturing) return
+    if (!captureRef.current || capturing) return
     setCapturing(true)
     try {
-      const canvas = await html2canvas(cardRef.current, {
+      const canvas = await html2canvas(captureRef.current, {
         scale: 2,
         useCORS: true,
         backgroundColor: null,
@@ -41,7 +26,7 @@ export default function SavingsCard({ results, config }) {
   }
 
   async function handleShare() {
-    const text = `I could save €${netSavings.toFixed(2)} a year (€${weekly.toFixed(2)} a week) on my energy bills. Check it out: yunoenergy.ie/door-door`
+    const text = `Based on your current energy rates, switching to Yuno Energy could save you an estimated €${netSavings.toFixed(2)} a year. Get started at yunoenergy.ie/door-door`
     if (navigator.share) {
       try {
         await navigator.share({ text })
@@ -61,53 +46,6 @@ export default function SavingsCard({ results, config }) {
 
   return (
     <div className={styles.wrapper}>
-      <div ref={cardRef} className={styles.card}>
-        <div className={styles.cardHeader}>
-          <p className={styles.headerLabel}>Your Estimated Energy Savings</p>
-        </div>
-
-        <div className={styles.cardBody}>
-          <div className={styles.mainAmount}>
-            <span className={styles.currency}>€</span>
-            <span className={styles.amount}>{netSavings.toFixed(2)}</span>
-          </div>
-          <p className={styles.weekly}>€{weekly.toFixed(2)} per week</p>
-
-          <div className={styles.breakdown}>
-            <div className={styles.row}>
-              <span>Electricity Savings</span>
-              <span>€{elecSavings.toFixed(2)}</span>
-            </div>
-            {config.fuelType === 'dual' && (
-              <div className={styles.row}>
-                <span>Gas Savings</span>
-                <span>€{gasSavings.toFixed(2)}</span>
-              </div>
-            )}
-            {cashbackAmount > 0 && (
-              <div className={`${styles.row} ${styles.rowCashback}`}>
-                <span>Cashback</span>
-                <span>€{cashbackAmount.toFixed(2)}</span>
-              </div>
-            )}
-            {penaltyAmount > 0 && (
-              <div className={`${styles.row} ${styles.rowPenalty}`}>
-                <span>Exit Fee</span>
-                <span>−€{penaltyAmount.toFixed(2)}</span>
-              </div>
-            )}
-          </div>
-
-          <span className={styles.planLabel}>{planLabel}</span>
-
-          <p className={styles.url}>yunoenergy.ie/door-door</p>
-
-          <p className={styles.disclaimer}>
-            Estimated savings based on figures provided. Actual savings may vary.
-          </p>
-        </div>
-      </div>
-
       <div className={styles.actions}>
         <button
           className={styles.btnSave}
@@ -120,7 +58,6 @@ export default function SavingsCard({ results, config }) {
           Share
         </button>
       </div>
-
       {toast && <div className={styles.toast}>Copied!</div>}
     </div>
   )

@@ -3,140 +3,10 @@
   margin-bottom: 1.25rem;
 }
 
-/* Card shell */
-.card {
-  background: white;
-  border-radius: 18px;
-  overflow: hidden;
-  box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.14), 0 1px 6px rgba(0, 0, 0, 0.06);
-}
-
-/* Green header strip */
-.cardHeader {
-  background: #00A651;
-  padding: 1.25rem 1.5rem 1.1rem;
-  text-align: center;
-}
-
-.headerLabel {
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.92);
-}
-
-/* White body */
-.cardBody {
-  padding: 1.5rem 1.5rem 1.25rem;
-  text-align: center;
-}
-
-/* Big annual number */
-.mainAmount {
-  display: inline-flex;
-  align-items: flex-start;
-  justify-content: center;
-  line-height: 1;
-  color: #00A651;
-  margin-bottom: 0.35rem;
-}
-
-.currency {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin-top: 0.6rem;
-  letter-spacing: 0;
-}
-
-.amount {
-  font-size: 4rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-}
-
-.weekly {
-  font-size: 1rem;
-  color: #6b7a8d;
-  margin-bottom: 1.4rem;
-}
-
-/* Breakdown rows */
-.breakdown {
-  background: #f7f9fb;
-  border: 1px solid #e4eaf0;
-  border-radius: 10px;
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.25rem;
-  text-align: left;
-}
-
-.row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.88rem;
-  padding: 0.32rem 0;
-  color: #5a6a7a;
-}
-
-.row + .row {
-  border-top: 1px solid #edf0f4;
-}
-
-.row span:last-child {
-  font-weight: 700;
-  color: #1c2b3a;
-}
-
-.rowCashback span:last-child {
-  color: #00A651;
-}
-
-.rowPenalty span:last-child {
-  color: #e53e3e;
-}
-
-/* Plan badge */
-.planLabel {
-  display: inline-block;
-  background: rgba(0, 166, 81, 0.1);
-  color: #00A651;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 0.28rem 0.8rem;
-  border-radius: 100px;
-  margin-bottom: 1rem;
-}
-
-/* URL line */
-.url {
-  font-size: 0.8rem;
-  color: #9aa8b6;
-  font-family: 'Courier New', Courier, monospace;
-  margin-bottom: 1rem;
-  letter-spacing: 0.01em;
-}
-
-/* Disclaimer */
-.disclaimer {
-  font-size: 0.7rem;
-  color: #aab4bf;
-  line-height: 1.5;
-  background: #f7f9fb;
-  border-top: 1px solid #edf0f4;
-  padding: 0.75rem 1rem;
-  margin: 0 -1.5rem -1.25rem;
-  border-radius: 0 0 18px 18px;
-}
-
 /* Action buttons */
 .actions {
   display: flex;
   gap: 0.625rem;
-  margin-top: 0.75rem;
 }
 
 .btnSave,
@@ -202,11 +72,5 @@
   to {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
-  }
-}
-
-@media (min-width: 480px) {
-  .amount {
-    font-size: 4.75rem;
   }
 }

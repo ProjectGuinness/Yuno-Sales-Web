@@ -5,6 +5,17 @@ function fmt(value) {
   return `€${abs.toFixed(2)}`
 }
 
+function getPlanLabel(config) {
+  const fuel = config.fuelType === 'dual' ? 'Dual Fuel' : 'Electricity Only'
+  const meter =
+    config.meterType === 'standard'
+      ? 'Standard'
+      : config.meterType === 'daynight'
+      ? 'Day / Night'
+      : 'Smart'
+  return `${fuel} — ${meter}`
+}
+
 function BreakdownItem({ label, value, variant }) {
   return (
     <div className={`${styles.breakdownItem} ${variant ? styles[variant] : ''}`}>
@@ -44,6 +55,8 @@ export default function ResultsDisplay({ results, config, isMonthly, onToggleMon
           Monthly
         </button>
       </div>
+
+      <span className={styles.planLabel}>{getPlanLabel(config)}</span>
 
       {isSaving ? (
         <>
