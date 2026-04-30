@@ -183,6 +183,24 @@
   line-height: 1.5;
 }
 
+.disclaimer {
+  font-size: 0.775rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
+  text-align: left;
+}
+
+.rateValidity {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  opacity: 0.7;
+  margin-top: 0.35rem;
+  text-align: left;
+}
+
 @media (min-width: 480px) {
   .card {
     padding: 2rem;

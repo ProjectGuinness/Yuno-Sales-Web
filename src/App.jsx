@@ -9,6 +9,12 @@ import styles from './App.module.css'
 
 const INITIAL_CONFIG = { fuelType: 'single', inContract: false, meterType: 'standard' }
 
+const RATE_FIELD_KEYS = new Set([
+  'elecStdRate', 'elecDnDayRate', 'elecDnNightRate',
+  'elecSmartDayRate', 'elecSmartNightRate', 'elecSmartPeakRate',
+  'gasRate',
+])
+
 function validateRates({ config, currentRates, usage, useNationalAverage }) {
   const errors = {}
   const { meterType, fuelType } = config
@@ -18,22 +24,27 @@ function validateRates({ config, currentRates, usage, useNationalAverage }) {
     if (val === '' || val === undefined || isNaN(n) || n < 0) errors[key] = true
   }
 
+  const checkRate = (key, val) => {
+    const n = parseFloat(val)
+    if (val === '' || val === undefined || isNaN(n) || n <= 0) errors[key] = true
+  }
+
   if (meterType === 'standard') {
-    check('elecStdRate', currentRates.elecStdRate)
+    checkRate('elecStdRate', currentRates.elecStdRate)
     check('elecStdStanding', currentRates.elecStdStanding)
     if (!useNationalAverage) check('elecStd', usage.elecStd)
   } else if (meterType === 'daynight') {
-    check('elecDnDayRate', currentRates.elecDnDayRate)
-    check('elecDnNightRate', currentRates.elecDnNightRate)
+    checkRate('elecDnDayRate', currentRates.elecDnDayRate)
+    checkRate('elecDnNightRate', currentRates.elecDnNightRate)
     check('elecDnStanding', currentRates.elecDnStanding)
     if (!useNationalAverage) {
       check('elecDnDay', usage.elecDnDay)
       check('elecDnNight', usage.elecDnNight)
     }
   } else if (meterType === 'smart') {
-    check('elecSmartDayRate', currentRates.elecSmartDayRate)
-    check('elecSmartNightRate', currentRates.elecSmartNightRate)
-    check('elecSmartPeakRate', currentRates.elecSmartPeakRate)
+    checkRate('elecSmartDayRate', currentRates.elecSmartDayRate)
+    checkRate('elecSmartNightRate', currentRates.elecSmartNightRate)
+    checkRate('elecSmartPeakRate', currentRates.elecSmartPeakRate)
     check('elecSmartStanding', currentRates.elecSmartStanding)
     if (!useNationalAverage) {
       check('elecSmartDay', usage.elecSmartDay)
@@ -43,7 +54,7 @@ function validateRates({ config, currentRates, usage, useNationalAverage }) {
   }
 
   if (fuelType === 'dual') {
-    check('gasRate', currentRates.gasRate)
+    checkRate('gasRate', currentRates.gasRate)
     check('gasStanding', currentRates.gasStanding)
     if (!useNationalAverage) check('gas', usage.gas)
   }
@@ -120,6 +131,7 @@ export default function App() {
   }
 
   const hasErrors = Object.keys(errors).length > 0
+  const hasRateErrors = Object.keys(errors).some(k => RATE_FIELD_KEYS.has(k))
 
   return (
     <div className={styles.app}>
@@ -155,7 +167,9 @@ export default function App() {
 
           {hasErrors && (
             <p className={styles.errorBanner}>
-              Please fill in all highlighted fields with valid positive numbers.
+              {hasRateErrors
+                ? 'Please enter your current rates to calculate savings.'
+                : 'Please fill in all highlighted fields with valid positive numbers.'}
             </p>
           )}
 
@@ -189,6 +203,7 @@ export default function App() {
           These calculations are estimates based on the figures provided. Actual savings may vary
           depending on usage, taxes, VAT, and PSO levies.
         </p>
+        <p className={styles.footerNotice}>No personal data is collected or stored by this tool.</p>
       </footer>
     </div>
   )

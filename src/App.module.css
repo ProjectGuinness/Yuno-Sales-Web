@@ -143,6 +143,12 @@
   line-height: 1.5;
 }
 
+.footerNotice {
+  margin-top: 0.5rem;
+  font-size: 0.72rem;
+  opacity: 0.75;
+}
+
 @media (min-width: 480px) {
   .header {
     padding: 2.5rem 2rem 3rem;
