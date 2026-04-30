@@ -36,8 +36,22 @@
   background: rgba(0, 0, 0, 0.06);
   border-radius: 8px;
   padding: 3px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
   gap: 2px;
+}
+
+/* Plan badge */
+.planLabel {
+  display: inline-block;
+  background: rgba(0, 166, 81, 0.1);
+  color: var(--green);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.75rem;
+  border-radius: 100px;
+  margin-bottom: 1.25rem;
 }
 
 .periodBtn {

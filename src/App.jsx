@@ -73,6 +73,7 @@ export default function App() {
   const [isMonthly, setIsMonthly] = useState(false)
   const [errors, setErrors] = useState({})
   const resultsRef = useRef(null)
+  const captureRef = useRef(null)
 
   useEffect(() => {
     if (results && resultsRef.current) {
@@ -185,14 +186,16 @@ export default function App() {
 
         {results && (
           <div ref={resultsRef}>
-            <ResultsDisplay
-              results={results}
-              config={config}
-              isMonthly={isMonthly}
-              onToggleMonthly={() => setIsMonthly(m => !m)}
-            />
+            <div ref={captureRef}>
+              <ResultsDisplay
+                results={results}
+                config={config}
+                isMonthly={isMonthly}
+                onToggleMonthly={() => setIsMonthly(m => !m)}
+              />
+            </div>
             {results.netSavings > 0 && (
-              <SavingsCard results={results} config={config} />
+              <SavingsCard captureRef={captureRef} results={results} />
             )}
           </div>
         )}
