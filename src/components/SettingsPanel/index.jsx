@@ -85,12 +85,6 @@ export default function SettingsPanel({ settings, onChange, open, onToggle }) {
                 value={settings.elecStdStanding}
                 onChange={v => set('elecStdStanding', v)}
               />
-              <NumberField
-                label="Cashback (€)"
-                id="yuno-elec-std-cashback"
-                value={settings.elecStdCashback}
-                onChange={v => set('elecStdCashback', v)}
-              />
             </div>
           </section>
 
@@ -112,19 +106,11 @@ export default function SettingsPanel({ settings, onChange, open, onToggle }) {
                 value={settings.elecDnNightRate}
                 onChange={v => set('elecDnNightRate', v)}
               />
-            </div>
-            <div className={styles.row}>
               <NumberField
                 label="Standing Charge (€)"
                 id="yuno-elec-dn-standing"
                 value={settings.elecDnStanding}
                 onChange={v => set('elecDnStanding', v)}
-              />
-              <NumberField
-                label="Cashback (€)"
-                id="yuno-elec-dn-cashback"
-                value={settings.elecDnCashback}
-                onChange={v => set('elecDnCashback', v)}
               />
             </div>
           </section>
@@ -161,11 +147,32 @@ export default function SettingsPanel({ settings, onChange, open, onToggle }) {
                 value={settings.elecSmartStanding}
                 onChange={v => set('elecSmartStanding', v)}
               />
+            </div>
+          </section>
+
+          <section className={styles.section}>
+            <h3 className={styles.sectionTitle}>
+              <span className={styles.sectionDot} style={{ background: '#f59e0b' }} />
+              Cashback Offers
+            </h3>
+            <div className={styles.row}>
               <NumberField
-                label="Cashback (€)"
-                id="yuno-elec-smart-cashback"
-                value={settings.elecSmartCashback}
-                onChange={v => set('elecSmartCashback', v)}
+                label="Electricity Only (any meter) (€)"
+                id="yuno-cashback-elec-only"
+                value={settings.elecOnlyCashback}
+                onChange={v => set('elecOnlyCashback', v)}
+              />
+              <NumberField
+                label="Dual Fuel — Standard / D-N (€)"
+                id="yuno-cashback-dual-std"
+                value={settings.dualFuelCashback}
+                onChange={v => set('dualFuelCashback', v)}
+              />
+              <NumberField
+                label="Dual Fuel — Smart (€)"
+                id="yuno-cashback-dual-smart"
+                value={settings.dualFuelSmartCashback}
+                onChange={v => set('dualFuelSmartCashback', v)}
               />
             </div>
           </section>
