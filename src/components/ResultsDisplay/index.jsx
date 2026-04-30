@@ -55,7 +55,7 @@ export default function ResultsDisplay({ results, config, isMonthly, onToggleMon
               <BreakdownItem label="Gas Savings" value={fmt(gas)} />
             )}
             {cashback > 0 && (
-              <BreakdownItem label="Yuno Cashback" value={fmt(cashback)} variant="cashback" />
+              <BreakdownItem label="Cashback" value={fmt(cashback)} variant="cashback" />
             )}
             {penalty > 0 && (
               <BreakdownItem label="Early Exit Fee" value={`−${fmt(penalty)}`} variant="penalty" />
@@ -76,7 +76,7 @@ export default function ResultsDisplay({ results, config, isMonthly, onToggleMon
             target="_blank"
             rel="noopener noreferrer"
           >
-            Switch to Yuno Now →
+            Switch &amp; Start Saving →
           </a>
         </>
       ) : (
@@ -90,7 +90,7 @@ export default function ResultsDisplay({ results, config, isMonthly, onToggleMon
           </div>
           <p className={styles.notCompetitiveTitle}>Not currently competitive</p>
           <p className={styles.notCompetitiveMsg}>
-            Based on these rates, Yuno may not save this customer money right now.
+            Based on these rates, switching may not save this customer money right now.
           </p>
 
           <div className={styles.breakdown}>
@@ -99,7 +99,7 @@ export default function ResultsDisplay({ results, config, isMonthly, onToggleMon
               <BreakdownItem label="Gas Savings" value={fmt(gas)} variant={gas < 0 ? 'penalty' : undefined} />
             )}
             {cashback > 0 && (
-              <BreakdownItem label="Yuno Cashback" value={fmt(cashback)} variant="cashback" />
+              <BreakdownItem label="Cashback" value={fmt(cashback)} variant="cashback" />
             )}
             {penalty > 0 && (
               <BreakdownItem label="Early Exit Fee" value={`−${fmt(penalty)}`} variant="penalty" />

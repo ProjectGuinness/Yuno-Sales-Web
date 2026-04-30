@@ -22,7 +22,7 @@ export default function SettingsPanel({ settings, onChange, open, onToggle }) {
           </svg>
           <div>
             <span className={styles.badge}>REP ONLY</span>
-            <span className={styles.title}>Yuno Rate Settings</span>
+            <span className={styles.title}>Plan Rates</span>
           </div>
         </div>
         <svg
@@ -41,7 +41,7 @@ export default function SettingsPanel({ settings, onChange, open, onToggle }) {
       </button>
 
       {!open && (
-        <p className={styles.closedHint}>Set Yuno's current rates before heading out.</p>
+        <p className={styles.closedHint}>Set the current plan rates before heading out.</p>
       )}
 
       {open && (
