@@ -3,16 +3,17 @@ export const DEFAULT_YUNO_SETTINGS = Object.freeze({
   gasStanding: 137.64,
   elecStdRate: 28.74,
   elecStdStanding: 201.12,
-  elecStdCashback: 60.00,
   elecDnDayRate: 31.34,
   elecDnNightRate: 18.94,
   elecDnStanding: 227.47,
-  elecDnCashback: 60.00,
   elecSmartDayRate: 30.91,
   elecSmartNightRate: 18.91,
   elecSmartPeakRate: 33.54,
   elecSmartStanding: 216.30,
-  elecSmartCashback: 75.00,
+  // Cashback by fuel type: electricity-only vs dual fuel
+  elecOnlyCashback: 20.00,
+  dualFuelCashback: 60.00,
+  dualFuelSmartCashback: 75.00,
 })
 
 export const NATIONAL_AVERAGES = Object.freeze({
@@ -35,7 +36,6 @@ export function calculateSavings({ config, currentRates, usage, yunoSettings }) 
   if (meterType === 'standard') {
     currentElecCost = (usage.elecStd * currentRates.elecStdRate) / 100 + currentRates.elecStdStanding
     yunoElecCost = (usage.elecStd * yunoSettings.elecStdRate) / 100 + yunoSettings.elecStdStanding
-    cashbackAmount = yunoSettings.elecStdCashback
   } else if (meterType === 'daynight') {
     currentElecCost =
       ((usage.elecDnDay * currentRates.elecDnDayRate + usage.elecDnNight * currentRates.elecDnNightRate) / 100) +
@@ -43,7 +43,6 @@ export function calculateSavings({ config, currentRates, usage, yunoSettings }) 
     yunoElecCost =
       ((usage.elecDnDay * yunoSettings.elecDnDayRate + usage.elecDnNight * yunoSettings.elecDnNightRate) / 100) +
       yunoSettings.elecDnStanding
-    cashbackAmount = yunoSettings.elecDnCashback
   } else if (meterType === 'smart') {
     currentElecCost =
       ((usage.elecSmartDay * currentRates.elecSmartDayRate +
@@ -57,7 +56,14 @@ export function calculateSavings({ config, currentRates, usage, yunoSettings }) 
         usage.elecSmartPeak * yunoSettings.elecSmartPeakRate) /
         100) +
       yunoSettings.elecSmartStanding
-    cashbackAmount = yunoSettings.elecSmartCashback
+  }
+
+  if (fuelType === 'single') {
+    cashbackAmount = yunoSettings.elecOnlyCashback
+  } else if (meterType === 'smart') {
+    cashbackAmount = yunoSettings.dualFuelSmartCashback
+  } else {
+    cashbackAmount = yunoSettings.dualFuelCashback
   }
 
   const elecSavings = currentElecCost - yunoElecCost
