@@ -1,5 +1,17 @@
+import { useEffect } from 'react'
+import { motion, useSpring, useTransform } from 'framer-motion'
 import styles from './ResultsDisplay.module.css'
 
+function AnimatedNumber({ value }) {
+  const spring = useSpring(0, { mass: 1, stiffness: 50, damping: 15 })
+  const display = useTransform(spring, (current) => current.toFixed(2))
+  
+  useEffect(() => {
+    spring.set(value)
+  }, [value, spring])
+
+  return <motion.span>{display}</motion.span>
+}
 function fmt(value) {
   const abs = Math.abs(value)
   return `€${abs.toFixed(2)}`
@@ -77,7 +89,7 @@ export default function ResultsDisplay({ results, config, isMonthly, onToggleMon
 
           <div className={styles.savingsAmount}>
             <span className={styles.currency}>€</span>
-            {Math.abs(net).toFixed(2)}
+            <AnimatedNumber value={Math.abs(net)} />
           </div>
           <p className={styles.savingsLabel}>
             Net savings in Year 1{isMonthly ? ' (monthly)' : ''}
@@ -129,7 +141,7 @@ export default function ResultsDisplay({ results, config, isMonthly, onToggleMon
 
           <div className={`${styles.savingsAmount} ${styles.savingsAmountNegative}`}>
             <span className={styles.currency}>€</span>
-            {Math.abs(net).toFixed(2)}
+            <AnimatedNumber value={Math.abs(net)} />
           </div>
           <p className={styles.savingsLabel}>
             Net {net < 0 ? 'cost' : 'savings'} in Year 1{isMonthly ? ' (monthly)' : ''}

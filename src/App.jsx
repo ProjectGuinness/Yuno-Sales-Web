@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { AlertCircle } from 'lucide-react'
 import SettingsPanel from './components/SettingsPanel'
 import CustomerConfig from './components/CustomerConfig'
 import RateInputs from './components/RateInputs'
@@ -142,63 +144,102 @@ export default function App() {
       </header>
 
       <div className={styles.content}>
-        <SettingsPanel
-          settings={yunoSettings}
-          onChange={setYunoSettings}
-          open={settingsOpen}
-          onToggle={() => setSettingsOpen(o => !o)}
-        />
-
-        <div className={styles.card}>
-          <CustomerConfig config={config} onChange={setConfig} />
-
-          <hr className={styles.divider} />
-
-          <RateInputs
-            meterType={config.meterType}
-            fuelType={config.fuelType}
-            useNationalAverage={useNationalAverage}
-            onUseNationalAverageChange={handleUseNationalAverageChange}
-            currentRates={currentRates}
-            onRateChange={handleRateChange}
-            usage={usage}
-            onUsageChange={handleUsageChange}
-            errors={errors}
+        <div className={styles.leftCol}>
+          <SettingsPanel
+            settings={yunoSettings}
+            onChange={setYunoSettings}
+            open={settingsOpen}
+            onToggle={() => setSettingsOpen(o => !o)}
           />
 
-          {hasErrors && (
-            <p className={styles.errorBanner}>
-              {hasRateErrors
-                ? 'Please enter your current rates to calculate savings.'
-                : 'Please fill in all highlighted fields with valid positive numbers.'}
-            </p>
-          )}
+          <motion.div 
+            className={styles.card}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <CustomerConfig config={config} onChange={setConfig} />
 
-          <div className={styles.actions}>
-            <button className={styles.btnCalculate} onClick={handleCalculate}>
-              Calculate My Savings
-            </button>
-            <button className={styles.btnReset} onClick={handleReset}>
-              Clear
-            </button>
-          </div>
+            <hr className={styles.divider} />
+
+            <RateInputs
+              meterType={config.meterType}
+              fuelType={config.fuelType}
+              useNationalAverage={useNationalAverage}
+              onUseNationalAverageChange={handleUseNationalAverageChange}
+              currentRates={currentRates}
+              onRateChange={handleRateChange}
+              usage={usage}
+              onUsageChange={handleUsageChange}
+              errors={errors}
+            />
+
+            <AnimatePresence>
+              {hasErrors && (
+                <motion.div 
+                  initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+                  animate={{ opacity: 1, height: 'auto', marginBottom: 16 }}
+                  exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                  className={styles.errorBanner}
+                >
+                  <AlertCircle size={20} />
+                  <span>
+                    {hasRateErrors
+                      ? 'Please enter your current rates to calculate savings.'
+                      : 'Please fill in all highlighted fields with valid positive numbers.'}
+                  </span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <div className={styles.actions}>
+              <button className={styles.btnCalculate} onClick={handleCalculate}>
+                Calculate My Savings
+              </button>
+              <button className={styles.btnReset} onClick={handleReset}>
+                Clear
+              </button>
+            </div>
+          </motion.div>
         </div>
 
-        {results && (
-          <div ref={resultsRef}>
-            <div ref={captureRef}>
-              <ResultsDisplay
-                results={results}
-                config={config}
-                isMonthly={isMonthly}
-                onToggleMonthly={() => setIsMonthly(m => !m)}
-              />
-            </div>
-            {results.netSavings > 0 && (
-              <SavingsCard captureRef={captureRef} results={results} />
+        <div className={styles.rightCol}>
+          <AnimatePresence mode="wait">
+            {results ? (
+              <motion.div 
+                key="results"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.4 }}
+                ref={resultsRef}
+              >
+                <div ref={captureRef}>
+                  <ResultsDisplay
+                    results={results}
+                    config={config}
+                    isMonthly={isMonthly}
+                    onToggleMonthly={() => setIsMonthly(m => !m)}
+                  />
+                </div>
+                {results.netSavings > 0 && (
+                  <SavingsCard captureRef={captureRef} results={results} />
+                )}
+              </motion.div>
+            ) : (
+              <motion.div 
+                key="placeholder"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className={styles.card}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '300px', color: 'var(--text-muted)', textAlign: 'center', height: '100%' }}
+              >
+                <p>Fill in the details on the left to see your potential savings.</p>
+              </motion.div>
             )}
-          </div>
-        )}
+          </AnimatePresence>
+        </div>
       </div>
 
       <footer className={styles.footer}>
